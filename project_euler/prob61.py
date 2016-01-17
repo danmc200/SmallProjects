@@ -25,6 +25,7 @@ def pop(col, order, num=1):
 
 #enter partial true so it won't check for
 #closing the check back to beginning
+#TODO could improve...
 def allIn(nums, partial=False):
     col = filter0s(nums)
     if(len(col) == 1 and partial):
@@ -96,5 +97,6 @@ if __name__ == "__main__":
         lambda n: n * (3 * n - 2)       #Octagonal
     ]
     nums = [0,0,0,0,0,0]
+    nums2 = [0,0,0] #in problem description
     nums = findCyclicalNums(nums, fun)
     print "Answer: " + str(nums) + "\nnum sum: " + str(sum(nums))
