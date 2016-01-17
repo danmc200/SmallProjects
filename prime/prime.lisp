@@ -1,0 +1,30 @@
+(defvar r 3)
+(defvar f 5)
+(defvar ret "f")
+
+(defun is-prime(n)
+
+    (setq r (floor (expt n 0.5)))
+    (setq f 5)
+    (setq ret "f")
+
+    (defvar prime-func #'(lambda(r f ret)
+        (loop 
+            while (equal ret "f")
+            do (if (> f r)
+                (setq ret t)
+                (if (or (eq (mod n f) 0)
+                    (eq (mod n (+ f 2)) 0))
+                        (setq ret nil)
+                        (setq f (+ f 6)))))
+        ret))
+
+    (if (or (eq n 2) (eq n 3))
+        (setq ret t)
+        (if (or (< n 2) (eq (mod n 2) 0))
+            (setq ret nil)
+            (if (< n 9)
+                (setq ret t)
+                (if (eq (mod n 3) 0)
+                    (setq ret nil)
+                    (funcall prime-func r f ret))))))
