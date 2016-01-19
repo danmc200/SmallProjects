@@ -14,7 +14,6 @@ double ferinheight_to_celcius(double ferinheight)
 
 int main(int argc, char * args[])
 {
-    int i = 0;
     if(argc == 1)
     {
         return -1;
