@@ -37,7 +37,7 @@ function getChars(){
         checkKey $x;
         resultCheck $result $x
     done;
-    for x in {1..9}; do
+    for x in {0..9}; do
         checkKey $x;
         resultCheck $result $x
     done;
