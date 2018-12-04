@@ -106,7 +106,9 @@ public class prob67
             Integer [] levelNext = TRIANGLE_NUMS[rowCol[0] + 1];
             int nodeNextLeft = levelNext[rowCol[1]];
             int nodeNextRight = levelNext[rowCol[1] + 1];
+	    //next row same column
             Binary binaryLeft = new Binary(nodeNextLeft, rowCol[0]+1, rowCol[1]);
+	    //next row next column
             Binary binaryRight = new Binary(nodeNextRight, rowCol[0]+1, rowCol[1]+1);
             
             if(rowCol[1] == 0)
