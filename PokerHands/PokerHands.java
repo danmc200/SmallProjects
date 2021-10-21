@@ -75,13 +75,6 @@ public class PokerHands
 		return methodAndReturn;
 	}
 	
-	private static Score getScore(String scoreName)
-	{
-		Score score = Score.valueOf(scoreName);
-		return score;
-		
-	}
-	
 //	public static Map<Score, String[]> getScores(List<String> handdealt)
 //	{
 //		Map<Score, String[]> methodAndReturn = new HashMap<Score, String[]>();
@@ -158,6 +151,17 @@ public class PokerHands
 	}
 	
 	/*****HELPER METHODS*******/
+	
+	/**
+	 * 
+	 * @param scoreName
+	 * @return Score Enum
+	 */
+	private static Score getScore(String scoreName)
+	{
+		Score score = Score.valueOf(scoreName);
+		return score;
+	}
 	
 	/**
 	 * 
