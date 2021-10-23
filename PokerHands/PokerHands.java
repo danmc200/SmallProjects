@@ -10,7 +10,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Poker Hands
+ * Poker Game 
+ * A result generator for a Poker Game.
  * @author danie
  */
 public class PokerHands 
@@ -36,10 +37,10 @@ public class PokerHands
 	/*****Getters and Setters*****/
 	
 	/**
-	 * TODO do scoring
-	 * @return
+	 * collects and returns the score results of each hand
+	 * @return the result of each hand dealt.
 	 */
-	public Map<String, Map<Score, String[]>> getHandResults()
+	public Map<String, Map<Score, String[]>> collectHandResults()
 	{
 		for(String s : hands.keySet())
 		{
@@ -48,6 +49,11 @@ public class PokerHands
 		}
 		return handResults;
 	}
+	
+	/**
+	 * @param key -> the key to match to gain result of hand dealt.
+	 * @return the result of hand dealt.
+	 */
 	public Map<Score, String []> getHandResult(String key)
 	{
 		for(String s : handResults.keySet())
@@ -60,6 +66,10 @@ public class PokerHands
 		return null;
 	}
 	
+	/**
+	 * @param playerLabel -> player label to match to give hand dealt.
+	 * @return hand dealt.
+	 */
 	public List<String> getHand(String playerLabel)
 	{
 		for(String s : hands.keySet())
@@ -102,7 +112,7 @@ public class PokerHands
 	{
 		String winner = null;
 		
-		Set<String> tmpHndLbls = getHandResults().keySet();
+		Set<String> tmpHndLbls = collectHandResults().keySet();
 		String [] emptyArr = new String [tmpHndLbls.size()];
 		List<String> playerLabels = Arrays.asList(tmpHndLbls.toArray(emptyArr));
 		Collections.sort(playerLabels);
@@ -141,6 +151,10 @@ public class PokerHands
 		clearHands();
 	}
 	
+	/**
+	 * @param handdealt
+	 * @return
+	 */
 	protected Map<Score, String[]> getScores(List<String> handdealt)
 	{
 		Map<Score, String[]> methodAndReturn = new HashMap<Score, String[]>();
@@ -184,7 +198,6 @@ public class PokerHands
 				e.printStackTrace();
 			}
 		}
-		
 		return methodAndReturn;
 	}
 	
@@ -224,7 +237,6 @@ public class PokerHands
 	}
 	
 	/**
-	 * 
 	 * @param scoreName
 	 * @return Score Enum
 	 */
@@ -237,7 +249,7 @@ public class PokerHands
 	/**
 	 * 
 	 * @param card -> the card to obtain ranked value
-	 * @return card ranked value
+	 * @return the card suit index relative to defined card values
 	 */
 	protected static int getCardValueIndex(String card)
 	{
@@ -249,9 +261,8 @@ public class PokerHands
 	}
 	
 	/**
-	 * 
 	 * @param card -> the card to obtain suit
-	 * @return
+	 * @return the card suit index relative to defined card suits
 	 */
 	protected static int getCardSuitIndex(String card)
 	{
@@ -276,7 +287,6 @@ public class PokerHands
 	}
 	
 	/**
-	 * 
 	 * @param hand -> the hand dealt
 	 * @param card -> the card to remove from hand
 	 * @return the hand minus the card given
@@ -294,7 +304,6 @@ public class PokerHands
 	}
 	
 	/**
-	 * 
 	 * @param indexCardValue -> indexed card value relative to ranked card values
 	 * @param indexCardSuit -> the card suit index relative to defined card suits
 	 * @return the matching card in defined String form
@@ -312,7 +321,6 @@ public class PokerHands
 	
 	
 	/**
-	 * 
 	 * @param hand -> the hand which dealt
 	 * @return The high card defined "value index" & "suit index"
 	 */
@@ -358,7 +366,6 @@ public class PokerHands
 	}
 	
 	/**
-	 * TODO verify
 	 * @param hand -> the hand which dealt
 	 * @return The Pair of cards matching OR empty null Characters
 	 */
@@ -408,7 +415,6 @@ public class PokerHands
 	}
 	
 	/**
-	 * 
 	 * @param hand -> the hand which dealt
 	 * @return two pairs which match
 	 */
@@ -449,7 +455,6 @@ public class PokerHands
 	}
 	
 	/**
-	 * 
 	 * @param hand -> the hand which dealt
 	 * @return Three of a kind OR Empty hand
 	 */

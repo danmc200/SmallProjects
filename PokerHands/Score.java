@@ -7,7 +7,7 @@ public enum Score
 	highCard ("high card"),
 	highPairCards ("pair"),
 	twoPair ("two pair"),
-	threeOfAKind ("Three of a kind"),
+	threeOfAKind ("three of a kind"),
 	straight ("straight"),
 	flush ("flush"),
 	fullHouse ("full house"),
@@ -21,11 +21,19 @@ public enum Score
 		this.descriptor = descriptor;
 	}
 	
+	/**
+	 * @return a text description of the type of hand
+	 */
 	public String getDescriptor()
 	{
 		return this.descriptor;
 	}
 	
+	/**
+	 * determine which hand has the highest card value on top.
+	 * @param hands -> array containing card hands.
+	 * @return index of hand with highest card
+	 */
 	public int compare(String[] ... hands)
 	{
 		int winner = 0;
@@ -64,6 +72,12 @@ public enum Score
 		return winner;
 	}
 	
+	/**
+	 * return the hand with the highest card in it.
+	 * assuming the hands are sorted with highest on top (0 index)
+	 * @param hands -> array containing card hands.
+	 * @return index of hand with highest card
+	 */
 	public static int highCardFirst(String[] ... hands)
 	{
 		int 
