@@ -119,7 +119,6 @@ public class PokerHands
 			if(result != 0)
 			{
 				winner = playerLabels.get(result - 1);
-				System.out.println(result);
 				String card = handResults.get(winner).get(Score.values()[i])[0];
 				String displayCard = getCardDisplay(card);
 				
@@ -654,6 +653,20 @@ public class PokerHands
 		return handArr;
 	}
 	
+	protected void printCardHand()
+	{
+		Map<String, List<String>> hands = getHands();
+		Set<String> tmpHndLbls = getHands().keySet();
+		String [] emptyArr = new String [tmpHndLbls.size()];
+		List<String> playerLabels = Arrays.asList(tmpHndLbls.toArray(emptyArr));
+		Collections.sort(playerLabels);
+		
+		for(String pl : playerLabels)
+		{
+			System.out.println(pl + ": " + hands.get(pl).toString());
+		}
+	}
+	
 	/**
 	 * A poker deck contains 52 cards - 
 	 * each card has a suit which is one of clubs, diamonds, hearts, or spades 
@@ -668,8 +681,8 @@ public class PokerHands
 		
 		int count = 1;
 		StringBuffer sb = new StringBuffer();
-		String
-			hand="",
+		String 
+			hand="", 
 			player="";
 		
 		for(String s : args)
@@ -680,7 +693,7 @@ public class PokerHands
 				sb.append(System.lineSeparator());
 				
 				player = sb.substring(0, sb.indexOf(":"));
-				hand = sb.substring(sb.indexOf(":")+1);
+				hand = sb.substring(sb.indexOf(":") + 1);
 				
 				String [] handArr = inputToArray(hand);
 				
@@ -690,8 +703,8 @@ public class PokerHands
 				}
 				else
 				{
-					System.out.print(player + ": " + hand);
-					System.out.println("run game");
+					pokerHands.printCardHand();
+					
 					//run game
 					pokerHands.compareScores();
 					
@@ -704,8 +717,7 @@ public class PokerHands
 			}
 			count++;
 		}
-		System.out.print(player + ": " + hand);
-		System.out.println("run game");
+		pokerHands.printCardHand();
 		pokerHands.compareScores();
     }
 }
