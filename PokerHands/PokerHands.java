@@ -12,11 +12,10 @@ import java.util.Set;
 /**
  * Poker Hands
  * @author danie
- *
  */
 public class PokerHands 
 {
-	protected static final List<Character> 
+	private static final List<Character> 
 			CARD_VALUES_RANKED = (List<Character>) Arrays.asList(
 					new Character [] {'2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'}),
 			CARD_SUITS = (List<Character>) Arrays.asList(
@@ -94,6 +93,7 @@ public class PokerHands
 	/******SCORING*****/
 	
 	/**
+	 * TODO currently set for 2 players
 	 * print the winner
 	 * @param retHandFullBlack
 	 * @param retHandFullWhite
@@ -110,25 +110,26 @@ public class PokerHands
 		
 		for(int i = Score.values().length - 1; i >= 0; i--)
 		{
+			Score currentScoreType = Score.values()[i];
 			String[][] scrs = new String [playerLabels.size()][];
 			for(int j = 0; j < playerLabels.size(); j++)
 			{
-				scrs[j] = handResults.get(playerLabels.get(j)).get(Score.values()[i]);
+				scrs[j] = handResults.get(playerLabels.get(j)).get(currentScoreType);
 			}
-			result = Score.highCardFirst(scrs);
+			result = currentScoreType.compare(scrs);
 			if(result != 0)
 			{
 				winner = playerLabels.get(result - 1);
-				String card = handResults.get(winner).get(Score.values()[i])[0];
+				String card = handResults.get(winner).get(currentScoreType)[0];
 				String displayCard = getCardDisplay(card);
 				
 				int result2 = result == 1 ? 2 : 1;
 				String loser = playerLabels.get(result2 - 1);
-				String card2 = handResults.get(loser).get(Score.values()[i])[0];
+				String card2 = handResults.get(loser).get(currentScoreType)[0];
 				String displayCard2 = getCardDisplay(card2);
 				String suffix = displayCard2 == null ? "" : " over " + displayCard2;
 				
-				System.out.println(winner + " wins. - with " + Score.values()[i].getDescriptor() + 
+				System.out.println(winner + " wins. - with " + currentScoreType.getDescriptor() + 
 						" " + displayCard + suffix);
 				break;
 			}
@@ -187,7 +188,40 @@ public class PokerHands
 		return methodAndReturn;
 	}
 	
-	/*****HELPER METHODS*******/
+	/*****HELPERS*******/
+
+	protected static String[] inputToArray(String input)
+	{
+		String [] handArr = new String[HAND_SIZE];
+		
+		for(int i = 0; i < input.length()-2; i+=2)
+		{
+			if(i == 0)
+			{
+				handArr[i] = "" + input.charAt(i) + input.charAt(i+1);
+			}
+			else
+			{
+				handArr[i/2] = "" + input.charAt(i) + input.charAt(i+1);
+			}
+		}
+		
+		return handArr;
+	}
+	
+	protected void printCardHands()
+	{
+		Map<String, List<String>> hands = getHands();
+		Set<String> tmpHndLbls = getHands().keySet();
+		String [] emptyArr = new String [tmpHndLbls.size()];
+		List<String> playerLabels = Arrays.asList(tmpHndLbls.toArray(emptyArr));
+		Collections.sort(playerLabels);
+		
+		for(String pl : playerLabels)
+		{
+			System.out.println(pl + ": " + hands.get(pl).toString());
+		}
+	}
 	
 	/**
 	 * 
@@ -299,7 +333,7 @@ public class PokerHands
 	}
 	
 	
-	/*****CARD IDENTIFICATION*******/
+	/*****CARD IDENTIFICATION*****/
 	
 	/**
 	 * only 4 2s in a deck no all 2s
@@ -634,51 +668,8 @@ public class PokerHands
 		return straight;
 	}
 	
-	protected static String[] inputToArray(String input)
+	public void scoreGameWithInput(PokerHands pokerHands, String [] args)
 	{
-		String [] handArr = new String[HAND_SIZE];
-		
-		for(int i = 0; i < input.length()-2; i+=2)
-		{
-			if(i == 0)
-			{
-				handArr[i] = "" + input.charAt(i) + input.charAt(i+1);
-			}
-			else
-			{
-				handArr[i/2] = "" + input.charAt(i) + input.charAt(i+1);
-			}
-		}
-		
-		return handArr;
-	}
-	
-	protected void printCardHand()
-	{
-		Map<String, List<String>> hands = getHands();
-		Set<String> tmpHndLbls = getHands().keySet();
-		String [] emptyArr = new String [tmpHndLbls.size()];
-		List<String> playerLabels = Arrays.asList(tmpHndLbls.toArray(emptyArr));
-		Collections.sort(playerLabels);
-		
-		for(String pl : playerLabels)
-		{
-			System.out.println(pl + ": " + hands.get(pl).toString());
-		}
-	}
-	
-	/**
-	 * A poker deck contains 52 cards - 
-	 * each card has a suit which is one of clubs, diamonds, hearts, or spades 
-	 * (denoted C, D, H, and S in the input data). 
-	 * Each card also has a value which is one of 2, 3, 4, 5, 6, 7, 8, 9, 10, jack, queen, king, ace 
-	 * (denoted 2, 3, 4, 5, 6, 7, 8, 9, T, J, Q, K, A).
-	 * @param args -> "(Player Label: ) (cards)*5"
-	 */
-	public static void main(String [] args)
-    {
-		PokerHands pokerHands = new PokerHands();
-		
 		int count = 1;
 		StringBuffer sb = new StringBuffer();
 		String 
@@ -703,9 +694,8 @@ public class PokerHands
 				}
 				else
 				{
-					pokerHands.printCardHand();
+					pokerHands.printCardHands();
 					
-					//run game
 					pokerHands.compareScores();
 					
 					//add after game clears hands
@@ -717,7 +707,22 @@ public class PokerHands
 			}
 			count++;
 		}
-		pokerHands.printCardHand();
+		//**run again b/c loop design
+		pokerHands.printCardHands();
 		pokerHands.compareScores();
+	}
+	
+	/**
+	 * A poker deck contains 52 cards - 
+	 * each card has a suit which is one of clubs, diamonds, hearts, or spades 
+	 * (denoted C, D, H, and S in the input data). 
+	 * Each card also has a value which is one of 2, 3, 4, 5, 6, 7, 8, 9, 10, jack, queen, king, ace 
+	 * (denoted 2, 3, 4, 5, 6, 7, 8, 9, T, J, Q, K, A).
+	 * @param args -> "(Player Label: ) (cards)*5"
+	 */
+	public static void main(String [] args)
+    {
+		PokerHands pokerHands = new PokerHands();
+		pokerHands.scoreGameWithInput(pokerHands, args);
     }
 }

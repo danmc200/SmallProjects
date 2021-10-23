@@ -1,7 +1,6 @@
 package PokerHands;
 
 import java.util.Arrays;
-import java.util.List;
 
 public enum Score
 {
@@ -72,6 +71,7 @@ public enum Score
 			indexValueHigh = 0,
 			indexValueHighNext = 0,
 			count = 1;
+		
 		indexValueHigh = PokerHands.getCardValueIndex(hands[0][0]);
 		for(String [] hand : Arrays.copyOfRange(hands, 1, hands.length))
 		{
