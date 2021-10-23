@@ -3,9 +3,11 @@ package PokerHands;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Poker Hands
@@ -14,21 +16,132 @@ import java.util.Map;
  */
 public class PokerHands 
 {
-	protected static List<Character> 
+	protected static final List<Character> 
 			CARD_VALUES_RANKED = (List<Character>) Arrays.asList(
 					new Character [] {'2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'}),
 			CARD_SUITS = (List<Character>) Arrays.asList(
 					new Character []{'C', 'D', 'H', 'S'});
-	private static List<String> 
+	private static final List<String> 
 			CARD_VALUES_DISPLAY = (List<String>) Arrays.asList(
-					new String [] {"2", "3", "4", "5", "6", "7", "8", "9", "Ten", "Jack", "Queen", "King", "Ace"});
-	private static final int HAND_SIZE = 5;
+					new String [] {"2", "3", "4", "5", "6", "7", "8", "9", "Ten", "Jack", "Queen", "King", "Ace"}),
+			CARD_SUITS_DISPLAY = (List<String>) Arrays.asList(
+					new String []{"Clubs", "Diamonds", "Hearts", "Spades"});
 	
+	private static final int HAND_SIZE = 5;
 	private static final String [] EMPTY_HAND = {null, null, null, null, null};
+	
+	private Map<String, Map<Score, String[]>> handResults = new HashMap<String, Map<Score, String[]>>();
+	private Map<String, List<String>> hands = new HashMap<String, List<String>>();
+	
+	
+	/*****Getters and Setters*****/
+	
+	/**
+	 * TODO do scoring
+	 * @return
+	 */
+	public Map<String, Map<Score, String[]>> getHandResults()
+	{
+		for(String s : hands.keySet())
+		{
+			List<String> hnd = hands.get(s);
+			handResults.put(s, getScores(hnd));
+		}
+		return handResults;
+	}
+	public Map<Score, String []> getHandResult(String key)
+	{
+		for(String s : handResults.keySet())
+		{
+			if(s.equals(key))
+			{
+				return handResults.get(s);
+			}
+		}
+		return null;
+	}
+	
+	public List<String> getHand(String playerLabel)
+	{
+		for(String s : hands.keySet())
+		{
+			if(s.equals(playerLabel))
+			{
+				return hands.get(s);
+			}
+		}
+		return null;
+	}
+	public Map<String, List<String>> getHands()
+	{
+		return hands;
+	}
+	
+	public void addHand(String playerLabel, List<String> hand)
+	{
+		hands.put(playerLabel, hand);
+	}
+	public void addHand(String playerLabel, String [] hand)
+	{
+		addHand(playerLabel, new ArrayList<String>(Arrays.asList(hand)));
+	}
+	public void clearHands()
+	{
+		hands = new HashMap<String, List<String>>();
+	}
+	
 	
 	/******SCORING*****/
 	
-	protected static Map<Score, String[]> getScores(List<String> handdealt)
+	/**
+	 * print the winner
+	 * @param retHandFullBlack
+	 * @param retHandFullWhite
+	 */
+	public void compareScores()
+	{
+		String winner = null;
+		
+		Set<String> tmpHndLbls = getHandResults().keySet();
+		String [] emptyArr = new String [tmpHndLbls.size()];
+		List<String> playerLabels = Arrays.asList(tmpHndLbls.toArray(emptyArr));
+		Collections.sort(playerLabels);
+		int result = 0; //result is index + 1 OR 0 for tie
+		
+		for(int i = Score.values().length - 1; i >= 0; i--)
+		{
+			String[][] scrs = new String [playerLabels.size()][];
+			for(int j = 0; j < playerLabels.size(); j++)
+			{
+				scrs[j] = handResults.get(playerLabels.get(j)).get(Score.values()[i]);
+			}
+			result = Score.highCardFirst(scrs);
+			if(result != 0)
+			{
+				winner = playerLabels.get(result - 1);
+				System.out.println(result);
+				String card = handResults.get(winner).get(Score.values()[i])[0];
+				String displayCard = getCardDisplay(card);
+				
+				int result2 = result == 1 ? 2 : 1;
+				String loser = playerLabels.get(result2 - 1);
+				String card2 = handResults.get(loser).get(Score.values()[i])[0];
+				String displayCard2 = getCardDisplay(card2);
+				String suffix = displayCard2 == null ? "" : " over " + displayCard2;
+				
+				System.out.println(winner + " wins. - with " + Score.values()[i].getDescriptor() + 
+						" " + displayCard + suffix);
+				break;
+			}
+		}
+		if(winner == null)
+		{
+			System.out.println("Tie.");
+		}
+		clearHands();
+	}
+	
+	protected Map<Score, String[]> getScores(List<String> handdealt)
 	{
 		Map<Score, String[]> methodAndReturn = new HashMap<Score, String[]>();
 		
@@ -75,81 +188,6 @@ public class PokerHands
 		return methodAndReturn;
 	}
 	
-//	public static Map<Score, String[]> getScores(List<String> handdealt)
-//	{
-//		Map<Score, String[]> methodAndReturn = new HashMap<Score, String[]>();
-//		
-//		methodAndReturn.put(Score.highCard, getHighCard(handdealt));
-//		methodAndReturn.put(Score.highPairCards, getHighPairCards(handdealt));
-//		methodAndReturn.put(Score.twoPair, getTwoPair(handdealt));
-//		methodAndReturn.put(Score.threeOfAKind, getThreeOfAKind(handdealt));
-//		methodAndReturn.put(Score.straight, getStraight(handdealt));
-//		methodAndReturn.put(Score.flush, getFlush(handdealt));
-//		methodAndReturn.put(Score.fullHouse, getFullHouse(handdealt));
-//		methodAndReturn.put(Score.fourOfAKind, getFourOfAKind(handdealt));
-//		methodAndReturn.put(Score.straightFlush, getStraightFlush(handdealt));
-//		
-//		return methodAndReturn;
-//	}
-	
-	/**
-	 * print the winner
-	 * @param retHandFullBlack
-	 * @param retHandFullWhite
-	 */
-	protected void compareScores(Map<Score, String[]> retHandFullBlack, Map<Score, String[]> retHandFullWhite)
-	{
-		for(int i = Score.values().length - 1; i >= 0; i--)
-		{
-			Score sc = Score.values()[i];
-			String [] scoreBlack = retHandFullBlack.get(sc);
-			String [] scoreWhite = retHandFullWhite.get(sc);
-			
-			boolean blackNull = scoreBlack[0] == (null);
-			boolean whiteNull = scoreWhite[0] == (null);
-			
-			if(!blackNull && whiteNull)
-			{
-				System.out.println("Black wins. - with " + sc.getDescriptor() + ": " + 
-						CARD_VALUES_DISPLAY.get(getCardValueIndex(scoreBlack[0])));
-				break;
-			}
-			else if(!whiteNull && blackNull)
-			{
-				System.out.println("White wins. - with " + sc.getDescriptor() + ": " + 
-						CARD_VALUES_DISPLAY.get(getCardValueIndex(scoreWhite[0])));
-				break;
-			}
-			else if(whiteNull && blackNull)
-			{
-				continue;
-			}
-			else
-			{
-				int winner = sc.compare(scoreBlack, scoreWhite);
-				if(winner == 0)
-				{
-					System.out.println("Black wins. - with " + sc.getDescriptor() + ": " + 
-							CARD_VALUES_DISPLAY.get(getCardValueIndex(scoreBlack[0])) +
-							" over " + CARD_VALUES_DISPLAY.get(getCardValueIndex(scoreWhite[0])));
-					break;
-				}
-				else if (winner == 1)
-				{
-					System.out.println("White wins. - with " + sc.getDescriptor() + ": " + 
-							CARD_VALUES_DISPLAY.get(getCardValueIndex(scoreWhite[0])) +
-							" over " + CARD_VALUES_DISPLAY.get(getCardValueIndex(scoreBlack[0])));
-					break;
-				}
-				else
-				{
-					System.out.println("Tie.");
-					break;
-				}
-			}
-		}
-	}
-	
 	/*****HELPER METHODS*******/
 	
 	/**
@@ -157,7 +195,7 @@ public class PokerHands
 	 * @param scoreName
 	 * @return Score Enum
 	 */
-	private static Score getScore(String scoreName)
+	protected static Score getScore(String scoreName)
 	{
 		Score score = Score.valueOf(scoreName);
 		return score;
@@ -170,6 +208,10 @@ public class PokerHands
 	 */
 	protected static int getCardValueIndex(String card)
 	{
+		if(card == null)
+		{
+			return -1;
+		}
 		return CARD_VALUES_RANKED.indexOf(card.charAt(0));
 	}
 	
@@ -181,6 +223,23 @@ public class PokerHands
 	protected static int getCardSuitIndex(String card)
 	{
 		return CARD_SUITS.indexOf(card.charAt(1));
+	}
+	
+	protected static String getCardDisplay(String card)
+	{
+		int indx = getCardValueIndex(card);
+		if(indx == -1)
+		{
+			return null;
+		}
+		
+		int indx2 = getCardSuitIndex(card);
+		if(indx2 == -1)
+		{
+			return null;
+		}
+		
+		return CARD_VALUES_DISPLAY.get(indx) + " of " + CARD_SUITS_DISPLAY.get(indx2);
 	}
 	
 	/**
@@ -224,7 +283,7 @@ public class PokerHands
 	 * @param hand -> the hand which dealt
 	 * @return The high card defined "value index" & "suit index"
 	 */
-	private static int [] getHighCardValueIndex(List<String> hand)
+	protected static int [] getHighCardValueIndex(List<String> hand)
 	{
 		int index = 0;
 		int indexSuit = 0;
@@ -435,24 +494,40 @@ public class PokerHands
 	 */
 	public static String [] getFlush(List<String> hand)
 	{
-		List<String> handCopy = new ArrayList<String>(hand);
+		List<String> 
+			handCopy = new ArrayList<String>(hand),
+			handReturn = new ArrayList<String>(hand);
 		
-		int cardSuitIndex = getCardSuitIndex(handCopy.get(0)),//defined suit
-				cardSuitIndexNext = 0;
-		handCopy = removeMatch(handCopy, handCopy.get(0));
+		int [] highCardIndexes = getHighCardValueIndex(handCopy);
+		
+		int 
+			cardValueIndex = highCardIndexes[0],
+			cardSuitIndex = highCardIndexes[1],
+			cardSuitIndexNext = 0;
+		
+		String card = getCard(cardValueIndex, cardSuitIndex);
+		
+		handReturn.add(card);
+		handCopy = removeMatch(handCopy, card);
 		
 		while(!handCopy.isEmpty())
 		{
-			cardSuitIndexNext = getCardSuitIndex(handCopy.get(0));
+			highCardIndexes = getHighCardValueIndex(handCopy);
+			cardValueIndex = highCardIndexes[0];
+			cardSuitIndexNext = highCardIndexes[1];
+			
+			card = getCard(cardValueIndex, cardSuitIndexNext);
+			
+			handReturn.add(card);
+			handCopy = removeMatch(handCopy, card);
+			
 			if(cardSuitIndex != cardSuitIndexNext)
 			{
 				return EMPTY_HAND;
 			}
-			handCopy = removeMatch(handCopy, handCopy.get(0));
 		}
 		
-		String [] handArr = new String[] {};
-		return hand.toArray(handArr);
+		return handReturn.toArray(new String [handReturn.size()]);
 	}
 	
 	/**
@@ -560,47 +635,77 @@ public class PokerHands
 		return straight;
 	}
 	
+	protected static String[] inputToArray(String input)
+	{
+		String [] handArr = new String[HAND_SIZE];
+		
+		for(int i = 0; i < input.length()-2; i+=2)
+		{
+			if(i == 0)
+			{
+				handArr[i] = "" + input.charAt(i) + input.charAt(i+1);
+			}
+			else
+			{
+				handArr[i/2] = "" + input.charAt(i) + input.charAt(i+1);
+			}
+		}
+		
+		return handArr;
+	}
+	
 	/**
 	 * A poker deck contains 52 cards - 
 	 * each card has a suit which is one of clubs, diamonds, hearts, or spades 
 	 * (denoted C, D, H, and S in the input data). 
 	 * Each card also has a value which is one of 2, 3, 4, 5, 6, 7, 8, 9, 10, jack, queen, king, ace 
 	 * (denoted 2, 3, 4, 5, 6, 7, 8, 9, T, J, Q, K, A).
-	 * @param args -> 1st 5 args are black hand, 2nd 5 args are white hand
+	 * @param args -> "(Player Label: ) (cards)*5"
 	 */
 	public static void main(String [] args)
     {
-		int count = 0;
-		while(count + (HAND_SIZE*2) <= args.length)
+		PokerHands pokerHands = new PokerHands();
+		
+		int count = 1;
+		StringBuffer sb = new StringBuffer();
+		String
+			hand="",
+			player="";
+		
+		for(String s : args)
 		{
-			List<String> hand_full_black = Arrays.asList(Arrays.copyOfRange(args, count, count+HAND_SIZE));
-			List<String> hand_full_white = Arrays.asList(Arrays.copyOfRange(args, count+HAND_SIZE, count+(HAND_SIZE*2)));
-			
-			System.out.println("Hand Black:");
-			for (String card : hand_full_black)
+			sb.append(s);
+			if(count == (HAND_SIZE+1))//hand size plus label
 			{
-				System.out.print(card);
+				sb.append(System.lineSeparator());
+				
+				player = sb.substring(0, sb.indexOf(":"));
+				hand = sb.substring(sb.indexOf(":")+1);
+				
+				String [] handArr = inputToArray(hand);
+				
+				if(pokerHands.getHand(player) == null)
+				{
+					pokerHands.addHand(player, handArr);
+				}
+				else
+				{
+					System.out.print(player + ": " + hand);
+					System.out.println("run game");
+					//run game
+					pokerHands.compareScores();
+					
+					//add after game clears hands
+					pokerHands.addHand(player, handArr);
+				}
+				sb = new StringBuffer();
+				count = 0;
+				System.out.println();
 			}
-			System.out.println();
-			System.out.println("Hand White:");
-			for (String card : hand_full_white)
-			{
-				System.out.print(card);
-			}
-			System.out.println();
-			
-			PokerHands pokerHands = new PokerHands();
-			Map<Score, String[]> retHandFullBlack = new HashMap<Score, String[]>();
-			Map<Score, String[]> retHandFullWhite = new HashMap<Score, String[]>();
-			
-			retHandFullBlack = PokerHands.getScores(hand_full_black);
-			
-			retHandFullWhite = PokerHands.getScores(hand_full_white);
-			
-			pokerHands.compareScores(retHandFullBlack, retHandFullWhite);
-			
-			System.out.println();
-			count += (HAND_SIZE*2);
+			count++;
 		}
+		System.out.print(player + ": " + hand);
+		System.out.println("run game");
+		pokerHands.compareScores();
     }
 }
