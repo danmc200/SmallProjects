@@ -32,7 +32,7 @@ public enum Score
 	/**
 	 * determine which hand has the highest card value on top.
 	 * @param hands -> array containing card hands.
-	 * @return index of hand with highest card
+	 * @return index of hand with highest card, 0 for tie and -1 for neither
 	 */
 	public int compare(String[] ... hands)
 	{
@@ -76,7 +76,7 @@ public enum Score
 	 * return the hand with the highest card in it.
 	 * assuming the hands are sorted with highest on top (0 index)
 	 * @param hands -> array containing card hands.
-	 * @return index of hand with highest card
+	 * @return index of hand with highest card, 0 for tie and -1 for neither
 	 */
 	public static int highCardFirst(String[] ... hands)
 	{
@@ -95,6 +95,10 @@ public enum Score
 			{
 				winner = count;
 				indexValueHigh = indexValueHighNext;
+			}
+			else if(indexValueHighNext == indexValueHigh && indexValueHigh == -1)
+			{
+				winner = -1;
 			}
 			else if(indexValueHighNext == indexValueHigh)
 			{

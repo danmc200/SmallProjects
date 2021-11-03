@@ -127,7 +127,7 @@ public class PokerHands
 				scrs[j] = handResults.get(playerLabels.get(j)).get(currentScoreType);
 			}
 			result = currentScoreType.compare(scrs);
-			if(result != 0)
+			if(result > 0)
 			{
 				winner = playerLabels.get(result - 1);
 				String card = handResults.get(winner).get(currentScoreType)[0];
@@ -143,10 +143,16 @@ public class PokerHands
 						" " + displayCard + suffix);
 				break;
 			}
+			else if(result == 0)
+			{
+				winner = "Tie.";
+				System.out.println(winner);
+				break;
+			}
 		}
 		if(winner == null)
 		{
-			System.out.println("Tie.");
+			System.out.println("Tie." + " no compares completed.");
 		}
 		clearHands();
 	}
