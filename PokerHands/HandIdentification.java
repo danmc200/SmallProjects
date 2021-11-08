@@ -360,6 +360,7 @@ public interface HandIdentification
 			if(indexValueHigh - indexValueNextHigh != 1)
 				return EMPTY_HAND;
 			cardBuffer = getCard(indexValueNextHigh, indexSuitHigh);
+			indexValueHigh = indexValueNextHigh;
 			handCopy = removeMatch(handCopy, cardBuffer);
 			straightCards[count++] = cardBuffer;
 		}

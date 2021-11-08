@@ -1,6 +1,10 @@
 package PokerHands;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public enum Score
 {
@@ -81,22 +85,28 @@ public enum Score
 	public static int highCardFirst(String[] ... hands)
 	{
 		int 
-			winner = 1,
-			indexValueHigh = 0,
-			indexValueHighNext = 0,
-			count = 1;
+			winner = -1,
+			indexValueHigh = -1,
+			indexValueHighNext = -1;
+		Map<Integer, String[]> handsCopy = new HashMap<Integer, String[]>();
 		
-		indexValueHigh = HandIdentification.getCardValueIndex(hands[0][0]);
-		if(indexValueHigh == -1)
+		for(int i = 0; i < hands.length; i++)
+		{
+			indexValueHighNext = HandIdentification.getCardValueIndex(hands[i][0]);
+			if(indexValueHighNext != -1)
+			{
+				handsCopy.put(i+1, hands[i]);
+			}
+		}
+		if(handsCopy.size() < 1)
 			return -1;
 		
-		for(String [] hand : Arrays.copyOfRange(hands, 1, hands.length))
+		for(Integer key : handsCopy.keySet())
 		{
-			count++;
-			indexValueHighNext = HandIdentification.getCardValueIndex(hand[0]);
+			indexValueHighNext = HandIdentification.getCardValueIndex(handsCopy.get(key)[0]);
 			if(indexValueHighNext > indexValueHigh)
 			{
-				winner = count;
+				winner = key;
 				indexValueHigh = indexValueHighNext;
 			}
 			else if(indexValueHighNext == indexValueHigh && indexValueHigh == -1)

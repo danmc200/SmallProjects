@@ -278,6 +278,7 @@ public class PokerHands implements HandIdentification
 	protected void clearHands()
 	{
 		hands = new HashMap<String, List<String>>();
+		handResults = new HashMap<String, Map<Score, String[]>>();
 	}
 	
 	/*****HELPERS*******/
