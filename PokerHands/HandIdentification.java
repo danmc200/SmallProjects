@@ -108,8 +108,8 @@ public interface HandIdentification
 	public static int [] getHighCardValueIndex(List<String> hand)
 	{
 		int 
-			index = 0,
-			indexSuit = 0;
+			index = -1,
+			indexSuit = -1;
 		
 		for(String card : hand)
 		{
