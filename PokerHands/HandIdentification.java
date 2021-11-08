@@ -129,6 +129,10 @@ public interface HandIdentification
 	 */
 	public static int getCardSuitIndex(String card)
 	{
+		if(card == null)
+		{
+			return -1;
+		}
 		return CARD_SUITS.indexOf(card.charAt(1));
 	}
 	
