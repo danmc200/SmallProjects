@@ -377,7 +377,7 @@ public interface HandIdentification
 	{
 		List<String> 
 			handCopy = new ArrayList<String>(hand),
-			handReturn = new ArrayList<String>(hand);
+			handReturn = new ArrayList<String>();
 		int [] highCardIndexes = getHighCardValueIndex(handCopy);
 		int 
 			cardValueIndex = highCardIndexes[0],
