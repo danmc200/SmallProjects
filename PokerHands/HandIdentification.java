@@ -30,14 +30,12 @@ public interface HandIdentification
 	public static Map<Score, String[]> getScores(List<String> handdealt)
 	{
 		Map<Score, String[]> methodAndReturn = new HashMap<Score, String[]>();
-		
 		Class<HandIdentification> handIdentificationClass = HandIdentification.class;
 		Class<Score> scoreClass = Score.class;
-		
-		Method [] pokerHandsMethods = handIdentificationClass.getDeclaredMethods();//public methods
-		
-		Score [] scoreEnums = (Score[]) scoreClass.getEnumConstants();
+		Method [] handIdentificationMethods = handIdentificationClass.getDeclaredMethods();//public methods
 		List<String> scoreNames = new ArrayList<String>();
+		Score [] scoreEnums = (Score[]) scoreClass.getEnumConstants();
+		
 		for(Score sc : scoreEnums)
 		{
 			String name = sc.name();
@@ -47,27 +45,23 @@ public interface HandIdentification
 			}
 		}
 		
-		for(Method m : pokerHandsMethods)
+		Score score = null;
+		for(Method m : handIdentificationMethods)
 		{
 			String baseName = m.getName().replace("get", "");
 			baseName = Character.toLowerCase(baseName.charAt(0)) + baseName.substring(1);
-			Score score = null;
 			if(scoreNames.contains(baseName))
 			{
 				score = Score.getScore(baseName);
-			}
-			else 
-			{
-				continue;
-			}
-			try {
-				if(!methodAndReturn.containsKey(score))
-				{
-					methodAndReturn.put(score, (String[]) m.invoke(handIdentificationClass, handdealt));
+				try {
+					if(!methodAndReturn.containsKey(score))
+					{
+						methodAndReturn.put(score, (String[]) m.invoke(handIdentificationClass, handdealt));
+					}
+					
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
 		}
 		return methodAndReturn;
@@ -76,6 +70,7 @@ public interface HandIdentification
 	public static String getCardDisplay(String card)
 	{
 		int indx = HandIdentification.getCardValueIndex(card);
+		
 		if(indx == -1)
 		{
 			return null;
@@ -112,8 +107,10 @@ public interface HandIdentification
 	 */
 	public static int [] getHighCardValueIndex(List<String> hand)
 	{
-		int index = 0;
-		int indexSuit = 0;
+		int 
+			index = 0,
+			indexSuit = 0;
+		
 		for(String card : hand)
 		{
 			int indexNew = getCardValueIndex(card);
@@ -278,9 +275,8 @@ public interface HandIdentification
 	{
 		List<String> handCopy = new ArrayList<String>(hand);
 		String [] 
-			threeOfAKind = {null, null, null};
-				
-		String [] twoPair = getHighPairCards(handCopy);
+			threeOfAKind = {null, null, null},
+			twoPair = getHighPairCards(handCopy);
 		
 		if(twoPair[0] != (null))
 		{
@@ -308,7 +304,6 @@ public interface HandIdentification
 	public static String [] getStraight(List<String> hand)
 	{
 		List<String> handCopy = new ArrayList<String>(hand);
-		
 		String []  
 			straightCards = {null, null, null, null, null};
 		int 
@@ -317,8 +312,8 @@ public interface HandIdentification
 			indexValueNextHigh=0,
 			count = 0;
 		String cardBuffer;
-		
 		int [] indexHigh = getHighCardValueIndex(handCopy);
+		
 		indexValueHigh = indexHigh[0];
 		indexSuitHigh = indexHigh[1];
 		
@@ -351,9 +346,7 @@ public interface HandIdentification
 		List<String> 
 			handCopy = new ArrayList<String>(hand),
 			handReturn = new ArrayList<String>(hand);
-		
 		int [] highCardIndexes = getHighCardValueIndex(handCopy);
-		
 		int 
 			cardValueIndex = highCardIndexes[0],
 			cardSuitIndex = highCardIndexes[1],
@@ -392,9 +385,10 @@ public interface HandIdentification
 	public static String [] getFullHouse(List<String> hand)
 	{
 		List<String> handCopy = new ArrayList<String>(hand);
-		String [] returnFullHouse = {null, null, null, null, null};
+		String [] 
+				returnFullHouse = {null, null, null, null, null},
+				threeOfAKind = getThreeOfAKind(handCopy);
 		
-		String [] threeOfAKind = getThreeOfAKind(handCopy);
 		if(threeOfAKind[0] != (null))
 		{
 			for(String card : threeOfAKind)
@@ -432,7 +426,8 @@ public interface HandIdentification
 	public static String [] getFourOfAKind(List<String> hand)
 	{
 		List<String> handCopy = new ArrayList<String>(hand);
-		String [] pair = {null, null},
+		String [] 
+				pair = {null, null},
 				fourOfAKind = {null, null, null, null};
 		
 		pair = getHighPairCards(handCopy);
