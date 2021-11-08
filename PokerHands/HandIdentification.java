@@ -9,19 +9,19 @@ import java.util.Map;
 
 public interface HandIdentification 
 {
-	static final List<Character> 
+	public static final List<Character> 
 		CARD_VALUES_RANKED = (List<Character>) Arrays.asList(
 				new Character [] {'2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'}),
 		CARD_SUITS = (List<Character>) Arrays.asList(
 				new Character []{'C', 'D', 'H', 'S'});
-	static final List<String> 
+	public static final List<String> 
 		CARD_VALUES_DISPLAY = (List<String>) Arrays.asList(
 				new String [] {"2", "3", "4", "5", "6", "7", "8", "9", "Ten", "Jack", "Queen", "King", "Ace"}),
 		CARD_SUITS_DISPLAY = (List<String>) Arrays.asList(
 				new String []{"Clubs", "Diamonds", "Hearts", "Spades"});
 	
-	static final int HAND_SIZE = 5;
-	static final String [] EMPTY_HAND = {null, null, null, null, null};
+	public static final int HAND_SIZE = 5;
+	public static final String [] EMPTY_HAND = {null, null, null, null, null};
 	
 	/**
 	 * @param handdealt

@@ -189,6 +189,7 @@ public class PokerHands implements HandIdentification
 		}
 		return null;
 	}
+	
 	protected Map<String, List<String>> getHands()
 	{
 		return hands;
@@ -198,10 +199,12 @@ public class PokerHands implements HandIdentification
 	{
 		hands.put(playerLabel, hand);
 	}
+	
 	protected void addHand(String playerLabel, String [] hand)
 	{
 		addHand(playerLabel, new ArrayList<String>(Arrays.asList(hand)));
 	}
+	
 	protected void clearHands()
 	{
 		hands = new HashMap<String, List<String>>();
@@ -234,8 +237,8 @@ public class PokerHands implements HandIdentification
 		Set<String> tmpHndLbls = getHands().keySet();
 		String [] emptyArr = new String [tmpHndLbls.size()];
 		List<String> playerLabels = Arrays.asList(tmpHndLbls.toArray(emptyArr));
-		Collections.sort(playerLabels);
 		
+		Collections.sort(playerLabels);
 		for(String pl : playerLabels)
 		{
 			System.out.println(pl + ": " + hands.get(pl).toString());
