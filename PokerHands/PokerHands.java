@@ -109,18 +109,18 @@ public class PokerHands implements HandIdentification
 			String[][] scrs = new String [playerLabels.size()][];
 			for(int j = 0; j < playerLabels.size(); j++)
 			{
-				scrs[j] = handResults.get(playerLabels.get(j)).get(currentScoreType);
+				scrs[j] = getHandResults().get(playerLabels.get(j)).get(currentScoreType);
 			}
 			result = currentScoreType.compare(scrs);
 			if(result > 0)
 			{
 				winner = playerLabels.get(result - 1);
-				String card = handResults.get(winner).get(currentScoreType)[0];
+				String card = getHandResults().get(winner).get(currentScoreType)[0];
 				String displayCard = HandIdentification.getCardDisplay(card);
 				
 				int result2 = result == 1 ? 2 : 1;
 				String loser = playerLabels.get(result2 - 1);
-				String card2 = handResults.get(loser).get(currentScoreType)[0];
+				String card2 = getHandResults().get(loser).get(currentScoreType)[0];
 				String displayCard2 = HandIdentification.getCardDisplay(card2);
 				String suffix = displayCard2 == null ? "" : " over " + displayCard2;
 				
@@ -153,9 +153,9 @@ public class PokerHands implements HandIdentification
 		for(String s : hands.keySet())
 		{
 			List<String> hnd = hands.get(s);
-			handResults.put(s, HandIdentification.getScores(hnd));
+			getHandResults().put(s, HandIdentification.getScores(hnd));
 		}
-		return handResults;
+		return getHandResults();
 	}
 	
 	/**
@@ -164,14 +164,22 @@ public class PokerHands implements HandIdentification
 	 */
 	protected Map<Score, String []> getHandResult(String key)
 	{
-		for(String s : handResults.keySet())
+		for(String s : getHandResults().keySet())
 		{
 			if(s.equals(key))
 			{
-				return handResults.get(s);
+				return getHandResults().get(s);
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * @return the current calculated results of all hands dealt.
+	 */
+	protected Map<String, Map<Score, String[]>> getHandResults()
+	{
+		return handResults;
 	}
 	
 	/**
