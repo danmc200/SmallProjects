@@ -88,40 +88,46 @@ public class PokerHands implements HandIdentification
 	/******SCORING*****/
 	
 	/**
-	 * TODO currently set for 2 players
 	 * print the winner
-	 * @param retHandFullBlack
-	 * @param retHandFullWhite
 	 */
 	public void compareScores()
 	{
-		String winner = null;
+		String 
+			winner = null,
+			card = null,
+			displayCard = null,
+			winner2 = null,
+			card2 = null,
+			displayCard2 = null;
+		int 
+			result = 0, //result is index + 1 OR 0 for tie
+			result2 = 0;
 		
 		Set<String> tmpHndLbls = collectHandResults().keySet();
 		String [] emptyArr = new String [tmpHndLbls.size()];
 		List<String> playerLabels = Arrays.asList(tmpHndLbls.toArray(emptyArr));
 		Collections.sort(playerLabels);
-		int result = 0; //result is index + 1 OR 0 for tie
 		
 		for(int i = Score.values().length - 1; i >= 0; i--)
 		{
 			Score currentScoreType = Score.values()[i];
-			String[][] scrs = new String [playerLabels.size()][];
-			for(int j = 0; j < playerLabels.size(); j++)
-			{
-				scrs[j] = getHandResults().get(playerLabels.get(j)).get(currentScoreType);
-			}
-			result = currentScoreType.compare(scrs);
+			result = compareScores(currentScoreType);
+			
 			if(result > 0)
 			{
+				//collect 1st result / winner display values
 				winner = playerLabels.get(result - 1);
-				String card = getHandResults().get(winner).get(currentScoreType)[0];
-				String displayCard = HandIdentification.getCardDisplay(card);
+				card = getHandResults().get(winner).get(currentScoreType)[0];
+				displayCard = HandIdentification.getCardDisplay(card);
 				
-				int result2 = result == 1 ? 2 : 1;
-				String loser = playerLabels.get(result2 - 1);
-				String card2 = getHandResults().get(loser).get(currentScoreType)[0];
-				String displayCard2 = HandIdentification.getCardDisplay(card2);
+				//collect 2nd result / runner up display values
+				result2 = compareScores(currentScoreType, winner);
+				if(result2 > 0)
+				{
+					winner2 = playerLabels.get(result2 - 1);
+					card2 = getHandResults().get(winner2).get(currentScoreType)[0];
+					displayCard2 = HandIdentification.getCardDisplay(card2);
+				}
 				String suffix = displayCard2 == null ? "" : " over " + displayCard2;
 				
 				System.out.println(winner + " wins. - with " + currentScoreType.getDescriptor() + 
@@ -140,6 +146,49 @@ public class PokerHands implements HandIdentification
 			System.out.println("Tie." + " no compares completed.");
 		}
 		clearHands();
+	}
+	
+	/**
+	 * 
+	 * @param currentScoreType -> Score type to compare
+	 * @param playerLabel -> pass player label to not include / remove from comparison
+	 * @param winner
+	 * @return
+	 */
+	public int compareScores(Score currentScoreType, String ... playerLabel)
+	{
+		Map<String, Map<Score, String[]>> handResultsCopy = new HashMap<String, Map<Score, String[]>> (getHandResults());;
+		if(playerLabel != null)
+		{
+			for(String label : playerLabel)
+			{
+				handResultsCopy = new HashMap<String, Map<Score, String[]>> (HandIdentification.removeHandResultsMatch(getHandResults(), label));
+			}
+		}
+		Set<String> tmpHndLbls = handResultsCopy.keySet();
+		String [] emptyArr = new String [tmpHndLbls.size()];
+		List<String> playerLabels = Arrays.asList(tmpHndLbls.toArray(emptyArr));
+		Collections.sort(playerLabels);
+		int result = 0; //result is index + 1 OR 0 for tie
+		String[][] scrs = new String [playerLabels.size()][];
+		for(int j = 0; j < playerLabels.size(); j++)
+		{
+			scrs[j] = getHandResults().get(playerLabels.get(j)).get(currentScoreType);
+		}
+		result = currentScoreType.compare(scrs);
+		
+		return result;
+	}
+	/**
+	 * 
+	 * @param currentScoreType -> Score type to compare
+	 * @param playerLabel -> pass player label to not include / remove from comparison
+	 * @param winner
+	 * @return
+	 */
+	public int compareScores(Score currentScoreType)
+	{
+		return compareScores(currentScoreType, (String []) null);
 	}
 	
 	/*****Getters and Setters*****/

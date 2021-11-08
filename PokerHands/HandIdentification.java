@@ -3,9 +3,11 @@ package PokerHands;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface HandIdentification 
 {
@@ -161,6 +163,31 @@ public interface HandIdentification
 		}
 		return hand;
 	}
+	
+	/**
+	 * 
+	 * @param handResults
+	 * @param playerLabel
+	 * @return
+	 */
+	public static Map<String, Map<Score, String[]>> removeHandResultsMatch(Map<String, Map<Score, String[]>> handResults, String playerLabel)
+	{
+		Map<String, Map<Score, String[]>> handResultsCopy = new HashMap<String, Map<Score, String[]>> (handResults);
+		Set<String> playerLabelsSet = handResultsCopy.keySet();
+		String [] emptyArr = new String [playerLabelsSet.size()];
+		List<String> playerLabels = Arrays.asList(playerLabelsSet.toArray(emptyArr));
+		Collections.sort(playerLabels);
+		
+		for(int i = 0; i < playerLabels.size(); i++)
+		{
+			if(playerLabels.get(i).equals(playerLabel))
+			{
+				handResultsCopy.remove(playerLabels.get(i));
+			}
+		}
+		return handResultsCopy;
+	}
+	
 	
 	
 	/*****HAND IDENTIFICATION*****/

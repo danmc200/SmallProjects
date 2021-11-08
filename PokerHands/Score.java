@@ -87,6 +87,9 @@ public enum Score
 			count = 1;
 		
 		indexValueHigh = HandIdentification.getCardValueIndex(hands[0][0]);
+		if(indexValueHigh == -1)
+			return -1;
+		
 		for(String [] hand : Arrays.copyOfRange(hands, 1, hands.length))
 		{
 			count++;
