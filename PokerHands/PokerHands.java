@@ -1,6 +1,5 @@
 package PokerHands;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -143,56 +142,6 @@ public class PokerHands implements HandIdentification
 		clearHands();
 	}
 	
-	/**
-	 * @param handdealt
-	 * @return
-	 */
-	protected Map<Score, String[]> getScores(List<String> handdealt)
-	{
-		Map<Score, String[]> methodAndReturn = new HashMap<Score, String[]>();
-		
-		Class<HandIdentification> handIdentificationClass = HandIdentification.class;
-		Class<Score> scoreClass = Score.class;
-		
-		Method [] pokerHandsMethods = handIdentificationClass.getDeclaredMethods();//public methods
-		
-		Score [] scoreEnums = (Score[]) scoreClass.getEnumConstants();
-		List<String> scoreNames = new ArrayList<String>();
-		for(Score sc : scoreEnums)
-		{
-			String name = sc.name();
-			if(!name.equals("main"))
-			{
-				scoreNames.add(name);
-			}
-		}
-		
-		for(Method m : pokerHandsMethods)
-		{
-			String baseName = m.getName().replace("get", "");
-			baseName = Character.toLowerCase(baseName.charAt(0)) + baseName.substring(1);
-			Score score = null;
-			if(scoreNames.contains(baseName))
-			{
-				score = PokerHands.getScore(baseName);
-			}
-			else 
-			{
-				continue;
-			}
-			try {
-				if(!methodAndReturn.containsKey(score))
-				{
-					methodAndReturn.put(score, (String[]) m.invoke(handIdentificationClass, handdealt));
-				}
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return methodAndReturn;
-	}
-	
 	/*****Getters and Setters*****/
 	
 	/**
@@ -204,7 +153,7 @@ public class PokerHands implements HandIdentification
 		for(String s : hands.keySet())
 		{
 			List<String> hnd = hands.get(s);
-			handResults.put(s, getScores(hnd));
+			handResults.put(s, HandIdentification.getScores(hnd));
 		}
 		return handResults;
 	}

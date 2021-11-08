@@ -1,8 +1,11 @@
 package PokerHands;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface HandIdentification 
 {
@@ -19,6 +22,56 @@ public interface HandIdentification
 	
 	static final int HAND_SIZE = 5;
 	static final String [] EMPTY_HAND = {null, null, null, null, null};
+	
+	/**
+	 * @param handdealt
+	 * @return Map with the the "Score" enum types and resulting hands
+	 */
+	public static Map<Score, String[]> getScores(List<String> handdealt)
+	{
+		Map<Score, String[]> methodAndReturn = new HashMap<Score, String[]>();
+		
+		Class<HandIdentification> handIdentificationClass = HandIdentification.class;
+		Class<Score> scoreClass = Score.class;
+		
+		Method [] pokerHandsMethods = handIdentificationClass.getDeclaredMethods();//public methods
+		
+		Score [] scoreEnums = (Score[]) scoreClass.getEnumConstants();
+		List<String> scoreNames = new ArrayList<String>();
+		for(Score sc : scoreEnums)
+		{
+			String name = sc.name();
+			if(!name.equals("main"))
+			{
+				scoreNames.add(name);
+			}
+		}
+		
+		for(Method m : pokerHandsMethods)
+		{
+			String baseName = m.getName().replace("get", "");
+			baseName = Character.toLowerCase(baseName.charAt(0)) + baseName.substring(1);
+			Score score = null;
+			if(scoreNames.contains(baseName))
+			{
+				score = PokerHands.getScore(baseName);
+			}
+			else 
+			{
+				continue;
+			}
+			try {
+				if(!methodAndReturn.containsKey(score))
+				{
+					methodAndReturn.put(score, (String[]) m.invoke(handIdentificationClass, handdealt));
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return methodAndReturn;
+	}
 	
 	public static String getCardDisplay(String card)
 	{
