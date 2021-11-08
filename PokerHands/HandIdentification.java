@@ -54,7 +54,7 @@ public interface HandIdentification
 			Score score = null;
 			if(scoreNames.contains(baseName))
 			{
-				score = PokerHands.getScore(baseName);
+				score = Score.getScore(baseName);
 			}
 			else 
 			{

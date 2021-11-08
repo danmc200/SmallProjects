@@ -242,14 +242,4 @@ public class PokerHands implements HandIdentification
 		}
 	}
 	
-	/**
-	 * @param scoreName
-	 * @return Score Enum
-	 */
-	protected static Score getScore(String scoreName)
-	{
-		Score score = Score.valueOf(scoreName);
-		return score;
-	}
-	
 }
