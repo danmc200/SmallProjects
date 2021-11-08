@@ -118,23 +118,26 @@ public class PokerHands implements HandIdentification
 				{
 					//just print "Tie."
 					System.out.println(winner);
-					break;
 				}
-				//collect 1st result / winner display values
-				card = getHandResults().get(winner).get(currentScoreType)[0];
-				displayCard = HandIdentification.getCardDisplay(card);
-				
-				//collect 2nd result / runner up display values
-				winner2 = compareScores(currentScoreType, winner);
-				if(winner2 != null)
+				else
 				{
-					card2 = getHandResults().get(winner2).get(currentScoreType)[0];
-					displayCard2 = HandIdentification.getCardDisplay(card2);
+					//collect 1st result / winner display values
+					card = getHandResults().get(winner).get(currentScoreType)[0];
+					displayCard = HandIdentification.getCardDisplay(card);
+					
+					//collect 2nd result / runner up display values
+					winner2 = compareScores(currentScoreType, winner);
+					if(winner2 != null)
+					{
+						card2 = getHandResults().get(winner2).get(currentScoreType)[0];
+						displayCard2 = HandIdentification.getCardDisplay(card2);
+					}
+					String suffix = displayCard2 == null ? "" : " over " + displayCard2;
+					
+					System.out.println(winner + " wins. - with " + currentScoreType.getDescriptor() + 
+							" " + displayCard + suffix);
 				}
-				String suffix = displayCard2 == null ? "" : " over " + displayCard2;
 				
-				System.out.println(winner + " wins. - with " + currentScoreType.getDescriptor() + 
-						" " + displayCard + suffix);
 				break;
 			}
 		}
