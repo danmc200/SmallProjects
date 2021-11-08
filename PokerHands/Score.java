@@ -86,11 +86,11 @@ public enum Score
 			indexValueHighNext = 0,
 			count = 1;
 		
-		indexValueHigh = PokerHands.getCardValueIndex(hands[0][0]);
+		indexValueHigh = HandIdentification.getCardValueIndex(hands[0][0]);
 		for(String [] hand : Arrays.copyOfRange(hands, 1, hands.length))
 		{
 			count++;
-			indexValueHighNext = PokerHands.getCardValueIndex(hand[0]);
+			indexValueHighNext = HandIdentification.getCardValueIndex(hand[0]);
 			if(indexValueHighNext > indexValueHigh)
 			{
 				winner = count;
