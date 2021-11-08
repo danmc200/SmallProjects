@@ -112,7 +112,7 @@ public enum Score
 	 * @param scoreName
 	 * @return Score Enum
 	 */
-	protected static Score getScore(String scoreName)
+	public static Score getScore(String scoreName)
 	{
 		Score score = Score.valueOf(scoreName);
 		return score;
