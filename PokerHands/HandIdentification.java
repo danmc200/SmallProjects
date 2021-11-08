@@ -69,24 +69,6 @@ public interface HandIdentification
 		return methodAndReturn;
 	}
 	
-	public static String getCardDisplay(String card)
-	{
-		int indx = HandIdentification.getCardValueIndex(card);
-		
-		if(indx == -1)
-		{
-			return null;
-		}
-		
-		int indx2 = HandIdentification.getCardSuitIndex(card);
-		if(indx2 == -1)
-		{
-			return null;
-		}
-		
-		return HandIdentification.CARD_VALUES_DISPLAY.get(indx) + " of " + HandIdentification.CARD_SUITS_DISPLAY.get(indx2);
-	}
-	
 	/**
 	 * @param indexCardValue -> indexed card value relative to ranked card values
 	 * @param indexCardSuit -> the card suit index relative to defined card suits

@@ -61,7 +61,7 @@ public class PokerHands implements HandIdentification
 				player = sb.substring(0, sb.indexOf(":"));
 				hand = sb.substring(sb.indexOf(":") + 1);
 				
-				String [] handArr = inputToArray(hand);
+				String [] handArr = CardReader.inputToArray(hand);
 				
 				if(pokerHands.getHand(player) == null)
 				{
@@ -69,7 +69,7 @@ public class PokerHands implements HandIdentification
 				}
 				else
 				{
-					pokerHands.printCardHands();
+					System.out.println(CardReader.getCardHandsPrintable(getHands()));
 					
 					pokerHands.compareScores();
 					
@@ -83,7 +83,7 @@ public class PokerHands implements HandIdentification
 			count++;
 		}
 		//**run again b/c loop design
-		pokerHands.printCardHands();
+		System.out.println(CardReader.getCardHandsPrintable(getHands()));
 		pokerHands.compareScores();
 	}
 	
@@ -123,14 +123,14 @@ public class PokerHands implements HandIdentification
 				{
 					//collect 1st result / winner display values
 					card = getHandResults().get(winner).get(currentScoreType)[0];
-					displayCard = HandIdentification.getCardDisplay(card);
+					displayCard = CardReader.getCardDisplay(card);
 					
 					//collect 2nd result / runner up display values
 					winner2 = compareScores(currentScoreType, winner);
 					if(winner2 != null)
 					{
 						card2 = getHandResults().get(winner2).get(currentScoreType)[0];
-						displayCard2 = HandIdentification.getCardDisplay(card2);
+						displayCard2 = CardReader.getCardDisplay(card2);
 					}
 					String suffix = displayCard2 == null ? "" : " over " + displayCard2;
 					
@@ -279,41 +279,6 @@ public class PokerHands implements HandIdentification
 	{
 		hands = new HashMap<String, List<String>>();
 		handResults = new HashMap<String, Map<Score, String[]>>();
-	}
-	
-	/*****HELPERS*******/
-
-	protected static String[] inputToArray(String input)
-	{
-		String [] handArr = new String[HandIdentification.HAND_SIZE];
-		
-		for(int i = 0; i < input.length()-2; i+=2)
-		{
-			if(i == 0)
-			{
-				handArr[i] = "" + input.charAt(i) + input.charAt(i+1);
-			}
-			else
-			{
-				handArr[i/2] = "" + input.charAt(i) + input.charAt(i+1);
-			}
-		}
-		
-		return handArr;
-	}
-	
-	protected void printCardHands()
-	{
-		Map<String, List<String>> hands = getHands();
-		Set<String> tmpHndLbls = getHands().keySet();
-		String [] emptyArr = new String [tmpHndLbls.size()];
-		List<String> playerLabels = Arrays.asList(tmpHndLbls.toArray(emptyArr));
-		
-		Collections.sort(playerLabels);
-		for(String pl : playerLabels)
-		{
-			System.out.println(pl + ": " + hands.get(pl).toString());
-		}
 	}
 	
 }
