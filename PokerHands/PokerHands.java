@@ -20,6 +20,8 @@ public class PokerHands implements HandIdentification
 	private Map<String, Map<Score, String[]>> handResults = new HashMap<String, Map<Score, String[]>>();
 	private Map<String, List<String>> hands = new HashMap<String, List<String>>();
 	
+	private static CardReaderBase cardReader;
+	
 	
 	/**
 	 * A poker deck contains 52 cards - 
@@ -61,7 +63,7 @@ public class PokerHands implements HandIdentification
 				player = sb.substring(0, sb.indexOf(":"));
 				hand = sb.substring(sb.indexOf(":") + 1);
 				
-				String [] handArr = CardReader.inputToArray(hand);
+				String [] handArr = getCardReader().inputToArray(hand);
 				
 				if(pokerHands.getHand(player) == null)
 				{
@@ -69,7 +71,7 @@ public class PokerHands implements HandIdentification
 				}
 				else
 				{
-					System.out.println(CardReader.getCardHandsPrintable(getHands()));
+					System.out.println(getCardReader().getCardHandsPrintable(getHands()));
 					
 					pokerHands.compareScores();
 					
@@ -83,7 +85,7 @@ public class PokerHands implements HandIdentification
 			count++;
 		}
 		//**run again b/c loop design
-		System.out.println(CardReader.getCardHandsPrintable(getHands()));
+		System.out.println(getCardReader().getCardHandsPrintable(getHands()));
 		pokerHands.compareScores();
 	}
 	
@@ -101,7 +103,6 @@ public class PokerHands implements HandIdentification
 			winner2 = null,
 			card2 = null,
 			displayCard2 = null;
-		
 		Set<String> tmpHndLbls = collectHandResults().keySet();
 		String [] emptyArr = new String [tmpHndLbls.size()];
 		List<String> playerLabels = Arrays.asList(tmpHndLbls.toArray(emptyArr));
@@ -123,14 +124,14 @@ public class PokerHands implements HandIdentification
 				{
 					//collect 1st result / winner display values
 					card = getHandResults().get(winner).get(currentScoreType)[0];
-					displayCard = CardReader.getCardDisplay(card);
+					displayCard = getCardReader().getCardDisplay(card);
 					
 					//collect 2nd result / runner up display values
 					winner2 = compareScores(currentScoreType, winner);
 					if(winner2 != null)
 					{
 						card2 = getHandResults().get(winner2).get(currentScoreType)[0];
-						displayCard2 = CardReader.getCardDisplay(card2);
+						displayCard2 = getCardReader().getCardDisplay(card2);
 					}
 					String suffix = displayCard2 == null ? "" : " over " + displayCard2;
 					
@@ -205,6 +206,23 @@ public class PokerHands implements HandIdentification
 	}
 	
 	/*****Getters and Setters*****/
+	
+	protected static CardReaderBase getCardReader()
+	{
+		if(cardReader == null)
+		{
+			cardReader = new CardReaderConsole();
+		}
+		
+		return cardReader;
+	}
+	protected static void setCardReader(CardReaderBase cardReaderChoice)
+	{
+		if(cardReaderChoice != null)
+		{
+			cardReader = cardReaderChoice;
+		}
+	}
 	
 	/**
 	 * collects and returns the score results of each hand

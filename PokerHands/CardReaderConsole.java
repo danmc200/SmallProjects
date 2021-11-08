@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public interface CardReader
+public class CardReaderConsole implements CardReaderBase
 {
 	/**
 	 * @param card -> the card to display
 	 * @return String -> describing the card for display to a console
 	 */
-	public static String getCardDisplay(String card)
+	public String getCardDisplay(String card)
 	{
 		int indx = HandIdentification.getCardValueIndex(card);
 		
@@ -34,7 +34,7 @@ public interface CardReader
 	 * @param hands
 	 * @return String printable to a console
 	 */
-	public static String getCardHandsPrintable(Map<String, List<String>> hands)
+	public String getCardHandsPrintable(Map<String, List<String>> hands)
 	{
 		Set<String> tmpHndLbls = hands.keySet();
 		String [] emptyArr = new String [tmpHndLbls.size()];
@@ -54,7 +54,7 @@ public interface CardReader
 	 * @param input -> the array of cards without any delimiters
 	 * @return String [] with a size of HandIdentification.HAND_SIZE
 	 */
-	public static String[] inputToArray(String input)
+	public String[] inputToArray(String input)
 	{
 		String [] handArr = new String[HandIdentification.HAND_SIZE];
 		
