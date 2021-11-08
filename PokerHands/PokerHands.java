@@ -15,6 +15,8 @@ import java.util.Set;
  */
 public class PokerHands implements HandIdentification
 {
+	private static final String TIE_RESULT_DISPLAY = "Tie.";
+	
 	private Map<String, Map<Score, String[]>> handResults = new HashMap<String, Map<Score, String[]>>();
 	private Map<String, List<String>> hands = new HashMap<String, List<String>>();
 	
@@ -99,9 +101,6 @@ public class PokerHands implements HandIdentification
 			winner2 = null,
 			card2 = null,
 			displayCard2 = null;
-		int 
-			result = 0, //result is index + 1 OR 0 for tie
-			result2 = 0;
 		
 		Set<String> tmpHndLbls = collectHandResults().keySet();
 		String [] emptyArr = new String [tmpHndLbls.size()];
@@ -111,20 +110,24 @@ public class PokerHands implements HandIdentification
 		for(int i = Score.values().length - 1; i >= 0; i--)
 		{
 			Score currentScoreType = Score.values()[i];
-			result = compareScores(currentScoreType);
+			winner = compareScores(currentScoreType);
 			
-			if(result > 0)
+			if(winner != null)
 			{
+				if(winner.equals(TIE_RESULT_DISPLAY))
+				{
+					//just print "Tie."
+					System.out.println(winner);
+					break;
+				}
 				//collect 1st result / winner display values
-				winner = playerLabels.get(result - 1);
 				card = getHandResults().get(winner).get(currentScoreType)[0];
 				displayCard = HandIdentification.getCardDisplay(card);
 				
 				//collect 2nd result / runner up display values
-				result2 = compareScores(currentScoreType, winner);
-				if(result2 > 0)
+				winner2 = compareScores(currentScoreType, winner);
+				if(winner2 != null)
 				{
-					winner2 = playerLabels.get(result2 - 1);
 					card2 = getHandResults().get(winner2).get(currentScoreType)[0];
 					displayCard2 = HandIdentification.getCardDisplay(card2);
 				}
@@ -134,16 +137,10 @@ public class PokerHands implements HandIdentification
 						" " + displayCard + suffix);
 				break;
 			}
-			else if(result == 0)
-			{
-				winner = "Tie.";
-				System.out.println(winner);
-				break;
-			}
 		}
 		if(winner == null)
 		{
-			System.out.println("Tie." + " no compares completed.");
+			System.out.println("Tie. no compares completed.");
 		}
 		clearHands();
 	}
@@ -155,7 +152,7 @@ public class PokerHands implements HandIdentification
 	 * @param winner
 	 * @return
 	 */
-	public int compareScores(Score currentScoreType, String ... playerLabel)
+	public String compareScores(Score currentScoreType, String ... playerLabel)
 	{
 		Map<String, Map<Score, String[]>> handResultsCopy = new HashMap<String, Map<Score, String[]>> (getHandResults());;
 		if(playerLabel != null)
@@ -177,7 +174,20 @@ public class PokerHands implements HandIdentification
 		}
 		result = currentScoreType.compare(scrs);
 		
-		return result;
+		if(result > 0)
+		{
+			//collect 1st result / winner display values
+			return playerLabels.get(result - 1);
+		}
+		else if(result == 0)
+		{
+			return TIE_RESULT_DISPLAY;
+		}
+		else
+		{
+			return null;
+		}
+		
 	}
 	/**
 	 * 
@@ -186,7 +196,7 @@ public class PokerHands implements HandIdentification
 	 * @param winner
 	 * @return
 	 */
-	public int compareScores(Score currentScoreType)
+	public String compareScores(Score currentScoreType)
 	{
 		return compareScores(currentScoreType, (String []) null);
 	}
