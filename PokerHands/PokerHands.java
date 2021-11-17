@@ -20,22 +20,13 @@ public class PokerHands implements HandIdentification
 	private Map<String, Map<Score, String[]>> handResults = new HashMap<String, Map<Score, String[]>>();
 	private Map<String, List<String>> hands = new HashMap<String, List<String>>();
 	
-	private static CardReaderBase cardReader;
+	private CardReaderBase cardReader = null;
 	
+	public PokerHands(CardReaderBase cardReader)
+	{
+		setCardReader(cardReader);
+	}
 	
-	/**
-	 * A poker deck contains 52 cards - 
-	 * each card has a suit which is one of clubs, diamonds, hearts, or spades 
-	 * (denoted C, D, H, and S in the input data). 
-	 * Each card also has a value which is one of 2, 3, 4, 5, 6, 7, 8, 9, 10, jack, queen, king, ace 
-	 * (denoted 2, 3, 4, 5, 6, 7, 8, 9, T, J, Q, K, A).
-	 * @param args -> "(Player Label: ) (cards)*5"
-	 */
-	public static void main(String [] args)
-    {
-		PokerHands pokerHands = new PokerHands();
-		pokerHands.scoreGameWithInput(pokerHands, args);
-    }
 	
 	/**
 	 * A poker deck contains 52 cards - 
@@ -207,7 +198,7 @@ public class PokerHands implements HandIdentification
 	
 	/*****Getters and Setters*****/
 	
-	protected static CardReaderBase getCardReader()
+	protected CardReaderBase getCardReader()
 	{
 		if(cardReader == null)
 		{
@@ -216,7 +207,7 @@ public class PokerHands implements HandIdentification
 		
 		return cardReader;
 	}
-	protected static void setCardReader(CardReaderBase cardReaderChoice)
+	protected void setCardReader(CardReaderBase cardReaderChoice)
 	{
 		if(cardReaderChoice != null)
 		{
