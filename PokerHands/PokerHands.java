@@ -9,8 +9,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Poker Game 
- * A result generator for a Poker Game.
+ * Poker Hands 
+ * Holds the card hands of multiple players 
+ * Provides scoring of players' hands
  * @author danie
  */
 public class PokerHands implements HandIdentification
