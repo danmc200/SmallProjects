@@ -37,7 +37,7 @@ public class PokerHands implements HandIdentification
 	 * (denoted 2, 3, 4, 5, 6, 7, 8, 9, T, J, Q, K, A).
 	 * @param args -> "(Player Label: ) (cards)*5"
 	 */
-	public void scoreGameWithInput(PokerHands pokerHands, String [] args)
+	public void scoreGameWithInput(String [] args)
 	{
 		int count = 1;
 		StringBuffer sb = new StringBuffer();
@@ -57,18 +57,18 @@ public class PokerHands implements HandIdentification
 				
 				String [] handArr = getCardReader().inputToArray(hand);
 				
-				if(pokerHands.getHand(player) == null)
+				if(this.getHand(player) == null)
 				{
-					pokerHands.addHand(player, handArr);
+					this.addHand(player, handArr);
 				}
 				else
 				{
 					System.out.println(getCardReader().getCardHandsPrintable(getHands()));
 					
-					pokerHands.compareScores();
+					this.compareScores();
 					
 					//add after game clears hands
-					pokerHands.addHand(player, handArr);
+					this.addHand(player, handArr);
 				}
 				sb = new StringBuffer();
 				count = 0;
@@ -78,7 +78,7 @@ public class PokerHands implements HandIdentification
 		}
 		//**run again b/c loop design
 		System.out.println(getCardReader().getCardHandsPrintable(getHands()));
-		pokerHands.compareScores();
+		this.compareScores();
 	}
 	
 	/******SCORING*****/

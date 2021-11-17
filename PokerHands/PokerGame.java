@@ -19,6 +19,6 @@ public class PokerGame
 	public static void main(String [] args)
     {
 		PokerHands pokerHands = new PokerHands(new CardReaderConsole());
-		pokerHands.scoreGameWithInput(pokerHands, args);
+		pokerHands.scoreGameWithInput(args);
     }
 }
