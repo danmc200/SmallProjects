@@ -17,6 +17,7 @@ import java.util.Set;
 public class PokerHands implements HandIdentification
 {
 	private static final String TIE_RESULT_DISPLAY = "Tie.";
+	private static final int TIE_RESULT = 0;
 	
 	private Map<String, Map<Score, String[]>> handResults = new HashMap<String, Map<Score, String[]>>();
 	private Map<String, List<String>> hands = new HashMap<String, List<String>>();
@@ -150,6 +151,8 @@ public class PokerHands implements HandIdentification
 	 */
 	public String compareScores(Score currentScoreType, String ... playerLabel)
 	{
+		String winner = null;
+		
 		Map<String, Map<Score, String[]>> handResultsCopy = new HashMap<String, Map<Score, String[]>> (getHandResults());;
 		if(playerLabel != null)
 		{
@@ -162,7 +165,7 @@ public class PokerHands implements HandIdentification
 		String [] emptyArr = new String [tmpHndLbls.size()];
 		List<String> playerLabels = Arrays.asList(tmpHndLbls.toArray(emptyArr));
 		Collections.sort(playerLabels);
-		int result = 0; //result is index + 1 OR 0 for tie
+		int result = TIE_RESULT;
 		String[][] scrs = new String [playerLabels.size()][];
 		for(int j = 0; j < playerLabels.size(); j++)
 		{
@@ -170,19 +173,17 @@ public class PokerHands implements HandIdentification
 		}
 		result = currentScoreType.compare(scrs);
 		
-		if(result > 0)
+		if(result > TIE_RESULT)
 		{
 			//collect 1st result / winner display values
-			return playerLabels.get(result - 1);
+			winner = playerLabels.get(result - 1);
 		}
-		else if(result == 0)
+		else if(result == TIE_RESULT)
 		{
-			return TIE_RESULT_DISPLAY;
+			winner = TIE_RESULT_DISPLAY;
 		}
-		else
-		{
-			return null;
-		}
+		
+		return winner;
 		
 	}
 	/**
