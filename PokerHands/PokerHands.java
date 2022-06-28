@@ -145,28 +145,28 @@ public class PokerHands implements HandIdentification
 	/**
 	 * 
 	 * @param currentScoreType -> Score type to compare
-	 * @param playerLabel -> pass player label to not include / remove from comparison
+	 * @param playerLabel -> pass player label to not include / remove from comparison. runner up?
 	 * @param winner
 	 * @return
 	 */
 	public String compareScores(Score currentScoreType, String ... playerLabel)
 	{
 		String winner = null;
+		int result = TIE_RESULT;
 		
+		//remove those not to compare
 		Map<String, Map<Score, String[]>> handResultsCopy = new HashMap<String, Map<Score, String[]>> (getHandResults());;
 		if(playerLabel != null)
-		{
 			for(String label : playerLabel)
-			{
 				handResultsCopy = new HashMap<String, Map<Score, String[]>> (HandIdentification.removeHandResultsMatch(getHandResults(), label));
-			}
-		}
+		
 		Set<String> tmpHndLbls = handResultsCopy.keySet();
 		String [] emptyArr = new String [tmpHndLbls.size()];
 		List<String> playerLabels = Arrays.asList(tmpHndLbls.toArray(emptyArr));
 		Collections.sort(playerLabels);
-		int result = TIE_RESULT;
+		
 		String[][] scrs = new String [playerLabels.size()][];
+		
 		for(int j = 0; j < playerLabels.size(); j++)
 		{
 			scrs[j] = getHandResults().get(playerLabels.get(j)).get(currentScoreType);
