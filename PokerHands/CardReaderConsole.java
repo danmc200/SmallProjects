@@ -59,11 +59,15 @@ public class CardReaderConsole implements CardReaderBase
 	{
 		String [] handArr = new String[HandIdentification.HAND_SIZE];
 		
-		for(int i = 0; i < input.length()-2; i+=2)
+		int 
+			i = 0,
+			index = 0;
+		do
 		{
-			int index = (i == 0) ? i : i/2;
 			handArr[index] = "" + input.charAt(i) + input.charAt(i+1);
-		}
+			i+=2;
+			index = i/2;
+		} while(i < input.length()-2);
 		
 		return handArr;
 	}
