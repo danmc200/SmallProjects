@@ -14,15 +14,11 @@ public class CardReaderConsole implements CardReaderBase
 	 */
 	public String getCardDisplay(String card)
 	{
+		
 		int indx = HandIdentification.getCardValueIndex(card);
-		
-		if(indx == -1)
-		{
-			return null;
-		}
-		
 		int indx2 = HandIdentification.getCardSuitIndex(card);
-		if(indx2 == -1)
+		
+		if(indx == -1 || indx2 == -1)
 		{
 			return null;
 		}
