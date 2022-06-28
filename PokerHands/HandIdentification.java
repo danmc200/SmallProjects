@@ -338,9 +338,10 @@ public interface HandIdentification
 		{
 			indexHigh = getHighCardValueIndex(handCopy);
 			indexValueNextHigh = indexHigh[0];
-			indexSuitHigh = indexHigh[1];
 			if(indexValueHigh - indexValueNextHigh != 1)
 				return EMPTY_HAND;
+
+			indexSuitHigh = indexHigh[1];
 			cardBuffer = getCard(indexValueNextHigh, indexSuitHigh);
 			indexValueHigh = indexValueNextHigh;
 			handCopy = removeMatch(handCopy, cardBuffer);
@@ -441,8 +442,8 @@ public interface HandIdentification
 	{
 		List<String> handCopy = new ArrayList<String>(hand);
 		String [] 
-				pair = {null, null},
-				fourOfAKind = {null, null, null, null};
+			pair = {null, null},
+			fourOfAKind = {null, null, null, null};
 		
 		pair = getHighPairCards(handCopy);
 		if(pair[0] != (null))
