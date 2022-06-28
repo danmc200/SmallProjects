@@ -36,18 +36,19 @@ public class CardReaderConsole implements CardReaderBase
 	 */
 	public String getCardHandsPrintable(Map<String, List<String>> hands)
 	{
+		StringBuffer cardsPrintable = new StringBuffer();
+		
 		Set<String> tmpHndLbls = hands.keySet();
 		String [] emptyArr = new String [tmpHndLbls.size()];
 		List<String> playerLabels = Arrays.asList(tmpHndLbls.toArray(emptyArr));
-		StringBuffer sb = new StringBuffer();
-		
 		Collections.sort(playerLabels);
+		
 		for(String pl : playerLabels)
 		{
-			sb.append(pl + ": " + hands.get(pl).toString() + System.lineSeparator());
+			cardsPrintable.append(pl + ": " + hands.get(pl).toString() + System.lineSeparator());
 		}
 		
-		return sb.toString();
+		return cardsPrintable.toString();
 	}
 	
 	/**
@@ -60,14 +61,8 @@ public class CardReaderConsole implements CardReaderBase
 		
 		for(int i = 0; i < input.length()-2; i+=2)
 		{
-			if(i == 0)
-			{
-				handArr[i] = "" + input.charAt(i) + input.charAt(i+1);
-			}
-			else
-			{
-				handArr[i/2] = "" + input.charAt(i) + input.charAt(i+1);
-			}
+			int index = (i == 0) ? i : i/2;
+			handArr[index] = "" + input.charAt(i) + input.charAt(i+1);
 		}
 		
 		return handArr;

@@ -17,7 +17,6 @@ import java.util.Set;
 public class PokerHands implements HandIdentification
 {
 	private static final String TIE_RESULT_DISPLAY = "Tie.";
-	private static final int TIE_RESULT = 0; 
 	
 	private Map<String, Map<Score, String[]>> handResults = new HashMap<String, Map<Score, String[]>>();
 	private Map<String, List<String>> hands = new HashMap<String, List<String>>();
@@ -110,6 +109,7 @@ public class PokerHands implements HandIdentification
 			{
 				if(winner.equals(TIE_RESULT_DISPLAY))
 				{
+					//just print "Tie."
 					System.out.println(winner);
 				}
 				else
@@ -144,44 +144,45 @@ public class PokerHands implements HandIdentification
 	/**
 	 * 
 	 * @param currentScoreType -> Score type to compare
-	 * @param playerLabel -> pass player label to not include / remove from comparison. runner up?
+	 * @param playerLabel -> pass player label to not include / remove from comparison
 	 * @param winner
 	 * @return
 	 */
 	public String compareScores(Score currentScoreType, String ... playerLabel)
 	{
-		String winner = null;
-
-		//remove any players defined from comparison
 		Map<String, Map<Score, String[]>> handResultsCopy = new HashMap<String, Map<Score, String[]>> (getHandResults());;
 		if(playerLabel != null)
+		{
 			for(String label : playerLabel)
+			{
 				handResultsCopy = new HashMap<String, Map<Score, String[]>> (HandIdentification.removeHandResultsMatch(getHandResults(), label));
-
+			}
+		}
 		Set<String> tmpHndLbls = handResultsCopy.keySet();
 		String [] emptyArr = new String [tmpHndLbls.size()];
 		List<String> playerLabels = Arrays.asList(tmpHndLbls.toArray(emptyArr));
 		Collections.sort(playerLabels);
-		int result = TIE_RESULT; 
+		int result = 0; //result is index + 1 OR 0 for tie
 		String[][] scrs = new String [playerLabels.size()][];
-
 		for(int j = 0; j < playerLabels.size(); j++)
 		{
 			scrs[j] = getHandResults().get(playerLabels.get(j)).get(currentScoreType);
 		}
 		result = currentScoreType.compare(scrs);
 		
-		if(result > TIE_RESULT)
+		if(result > 0)
 		{
 			//collect 1st result / winner display values
-			winner = playerLabels.get(result - 1);
+			return playerLabels.get(result - 1);
 		}
-		else if(result == TIE_RESULT)
+		else if(result == 0)
 		{
-			winner = TIE_RESULT_DISPLAY;
+			return TIE_RESULT_DISPLAY;
 		}
-
-		return winner;
+		else
+		{
+			return null;
+		}
 		
 	}
 	/**
@@ -231,21 +232,18 @@ public class PokerHands implements HandIdentification
 	
 	/**
 	 * @param key -> the key to match to gain result of hand dealt.
-	 * @return the result of hand dealt. or null if no match
+	 * @return the result of hand dealt.
 	 */
 	protected Map<Score, String []> getHandResult(String key)
 	{
-		Map<Score, String []> handResult = null;
-
 		for(String s : getHandResults().keySet())
 		{
 			if(s.equals(key))
 			{
-				handResult = getHandResults().get(s);
-				break;
+				return getHandResults().get(s);
 			}
 		}
-		return handResult;
+		return null;
 	}
 	
 	/**
@@ -258,21 +256,18 @@ public class PokerHands implements HandIdentification
 	
 	/**
 	 * @param playerLabel -> player label to match to give hand dealt.
-	 * @return hand dealt. or null if no match
+	 * @return hand dealt.
 	 */
 	protected List<String> getHand(String playerLabel)
 	{
-		List<String> hand = null;
-
 		for(String s : hands.keySet())
 		{
 			if(s.equals(playerLabel))
 			{
-				hand = hands.get(s);
-				break;
+				return hands.get(s);
 			}
 		}
-		return hand;
+		return null;
 	}
 	
 	protected Map<String, List<String>> getHands()

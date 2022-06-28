@@ -1,10 +1,8 @@
 package PokerHands;
 
-import org.junit.jupiter.api.Test;
 
 class TestPokerHands 
 {
-	@Test
 	void test() {
 		fail("Not yet implemented");
 	}

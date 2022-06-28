@@ -106,6 +106,10 @@ public enum Score
 				winner = key;
 				indexValueHigh = indexValueHighNext;
 			}
+			else if(indexValueHighNext == indexValueHigh && indexValueHigh == -1)
+			{
+				winner = -1;
+			}
 			else if(indexValueHighNext == indexValueHigh)
 			{
 				winner = 0;

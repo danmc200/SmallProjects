@@ -76,13 +76,15 @@ public interface HandIdentification
 	 */
 	public static String getCard(int indexCardValue, int indexCardSuit)
 	{
+		StringBuffer card = new StringBuffer();
+		
 		Character c1 = CARD_VALUES_RANKED.get(indexCardValue);
 		Character c2 = CARD_SUITS.get(indexCardSuit);
-		StringBuffer sb = new StringBuffer();
-		sb.append(c1);
-		sb.append(c2);
+
+		card.append(c1);
+		card.append(c2);
 		
-		return sb.toString();
+		return card.toString();
 	}
 	
 	/**
@@ -338,10 +340,9 @@ public interface HandIdentification
 		{
 			indexHigh = getHighCardValueIndex(handCopy);
 			indexValueNextHigh = indexHigh[0];
+			indexSuitHigh = indexHigh[1];
 			if(indexValueHigh - indexValueNextHigh != 1)
 				return EMPTY_HAND;
-
-			indexSuitHigh = indexHigh[1];
 			cardBuffer = getCard(indexValueNextHigh, indexSuitHigh);
 			indexValueHigh = indexValueNextHigh;
 			handCopy = removeMatch(handCopy, cardBuffer);
@@ -442,8 +443,8 @@ public interface HandIdentification
 	{
 		List<String> handCopy = new ArrayList<String>(hand);
 		String [] 
-			pair = {null, null},
-			fourOfAKind = {null, null, null, null};
+				pair = {null, null},
+				fourOfAKind = {null, null, null, null};
 		
 		pair = getHighPairCards(handCopy);
 		if(pair[0] != (null))
