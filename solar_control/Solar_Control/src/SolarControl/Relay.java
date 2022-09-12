@@ -25,6 +25,14 @@ public enum Relay
 		this.relayCodeValues = relayCodeValues;
 	}
 	
+	/**
+	 * associated with the 2 commands available in Relay enum
+	 **/
+	public enum ToggleOption {
+		ON,
+		OFF
+	}
+	
 	public String getDisplayText()
 	{
 		return this.relayDisplayText;
@@ -50,13 +58,15 @@ public enum Relay
 	 * @param option 0 or 1 for ON/OFF
 	 * @throws IOException 
 	 */
-	public void executeCommand(int optionOnOrOff) throws IOException
+	public void executeCommand(ToggleOption optionOnOrOff) throws IOException
 	{
 		Runtime rt = Runtime.getRuntime();
 		Process p = null;
-		String command = COMMAND_PREFIX + this.getRelayCode()[optionOnOrOff];
+		String command = COMMAND_PREFIX + this.getRelayCode()[optionOnOrOff.ordinal()];
 		
 		p = rt.exec(command);
 		ConsolePrinter.printOutput(p);
 	}
 }
+
+

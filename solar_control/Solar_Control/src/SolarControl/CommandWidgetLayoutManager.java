@@ -7,6 +7,8 @@ import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+import SolarControl.Relay.ToggleOption;
+
 public interface CommandWidgetLayoutManager {
 
 	public static int [] buildButton(String label, JFrame frame, int x, int y)
@@ -26,7 +28,7 @@ public interface CommandWidgetLayoutManager {
 				String text = b.getText();
 				Relay relay = Relay.getRelay(text);
 				try {
-					relay.executeCommand(0);
+					relay.executeCommand(ToggleOption.ON);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
