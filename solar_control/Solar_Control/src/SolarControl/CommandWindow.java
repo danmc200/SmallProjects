@@ -16,10 +16,11 @@ public class CommandWindow
 	
 	public CommandWindow() 
 	{
+		CommandWidgetUtil cwu = CommandWidgetUtil.getCommandWidgetUtilInstance();
 		for(Relay r : Relay.values())
 		{
 			String dispText = r.getDisplayText();
-			int [] axis = CommandWidgetLayoutManager.buildButton(dispText, commandFrame, xAxis, yAxis);
+			int [] axis = cwu.buildButton(dispText, commandFrame, xAxis, yAxis);
 			xAxis = axis[0];
 			yAxis = axis[1];
 		}
