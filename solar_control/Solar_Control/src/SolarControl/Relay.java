@@ -68,5 +68,3 @@ public enum Relay
 		ConsolePrinter.printOutput(p);
 	}
 }
-
-

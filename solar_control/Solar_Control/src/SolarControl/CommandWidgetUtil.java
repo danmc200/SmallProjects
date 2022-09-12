@@ -19,8 +19,10 @@ public class CommandWidgetUtil
 	
 	private static CommandWidgetUtil cwu = new CommandWidgetUtil();
 	
+	/**
+	 * singleton
+	 */
 	private CommandWidgetUtil() {
-		// TODO Auto-generated constructor stub
 	}
 	
 	public static CommandWidgetUtil getCommandWidgetUtilInstance()
@@ -28,13 +30,22 @@ public class CommandWidgetUtil
 		return cwu;
 	}
 	
+	/**
+	 * 
+	 * @param label text to cover button
+	 * @param frame frame to place button into
+	 * @param x axis to place
+	 * @param y axis to place
+	 * @return the next x/y axis to use
+	 */
 	public int [] buildButton(String label, JFrame frame, int x, int y)
 	{
 		//button width/height defined....
 		int 
 			height = 40,
-			width = 100,		
-			heightInc = 50;
+			width = 100,
+			buttonPadding = 10,
+			heightInc = height + buttonPadding;
 		JButton b = new JButton(label);
 		b.setBounds(x,y,width,height);//x, y, width, height
 		frame.add(b);
@@ -89,8 +100,8 @@ public class CommandWidgetUtil
 			}
 			else if (c instanceof JRootPane)
 			{
-				int count = ((JRootPane)c).getContentPane().getComponentCount();
 				getComponents(((JRootPane)c).getContentPane().getComponents(), relay);
+				int count = ((JRootPane)c).getContentPane().getComponentCount();
 				System.out.println("3" + " " + count + ((JRootPane)c).getContentPane().getComponents().length);
 			}
 			else if (c instanceof JButton)
