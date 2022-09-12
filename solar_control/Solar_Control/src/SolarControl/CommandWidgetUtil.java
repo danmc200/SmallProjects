@@ -15,6 +15,7 @@ import SolarControl.Relay.ToggleOption;
 
 public class CommandWidgetUtil 
 {
+	//placeholder variable. clear after 
 	private JButton buttonSelected;
 	
 	private static CommandWidgetUtil cwu = new CommandWidgetUtil();
@@ -75,12 +76,19 @@ public class CommandWidgetUtil
 	{
 		buttonSelected = jb;
 	}
+	/**
+	 * call after using placeholder buttonSelected variable
+	 **/
+	public void clearButtonSelected()
+	{
+		setButtonSelected(null);
+	}
 	
 	public JButton getButton(JFrame frame, Relay relay)
 	{
 		getComponents(frame.getComponents(), relay);
 		JButton jb = getButtonSelected();
-		setButtonSelected(null);
+		clearButtonSelected();
 		return jb;
 	}
 	
@@ -110,7 +118,7 @@ public class CommandWidgetUtil
 				if(jb.getText().equals(relay.getDisplayText()))
 				{
 					System.out.println("Found button:" + c);
-					buttonSelected = jb;
+					setButtonSelected(jb);
 					return;
 				}
 			}
