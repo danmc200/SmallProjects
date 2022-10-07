@@ -11,6 +11,7 @@ public interface ConsolePrinter {
 		BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
 		BufferedReader br2 = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 		String s = null;
+
 		while((s = br.readLine()) != null)
 		{
 			System.out.println(s);

@@ -17,15 +17,20 @@ public class CommandWindow
 	public CommandWindow() 
 	{
 		CommandWidgetUtil cwu = CommandWidgetUtil.getCommandWidgetUtilInstance();
+		int [] axis;
+
 		for(Relay r : Relay.values())
 		{
 			String dispText = r.getDisplayText();
-			int [] axis = cwu.buildButton(dispText, commandFrame, xAxis, yAxis);
+			axis = cwu.buildButtonRelay(dispText, commandFrame, xAxis, yAxis);
 			xAxis = axis[0];
 			yAxis = axis[1];
 		}
+		axis = cwu.buildButtonReadRelay("Read Relay", commandFrame, xAxis, yAxis);
+		xAxis = axis[0];
+		yAxis = axis[1];
 		
-		commandFrame.setSize(COMMAND_FRAME_WIDTH,COMMAND_FRAME_HEIGHT);
+		commandFrame.setSize(COMMAND_FRAME_WIDTH, COMMAND_FRAME_HEIGHT);
 		commandFrame.setLayout(null);
 		commandFrame.setVisible(true);
 	}

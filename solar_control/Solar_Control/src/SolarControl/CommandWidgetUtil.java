@@ -39,7 +39,7 @@ public class CommandWidgetUtil
 	 * @param y axis to place
 	 * @return the next x/y axis to use
 	 */
-	public int [] buildButton(String label, JFrame frame, int x, int y)
+	public int [] buildButton(String label, JFrame frame, int x, int y, ActionListener actionListener)
 	{
 		//button width/height defined....
 		int 
@@ -50,7 +50,33 @@ public class CommandWidgetUtil
 		JButton b = new JButton(label);
 		b.setBounds(x,y,width,height);//x, y, width, height
 		frame.add(b);
-		b.addActionListener(new ActionListener() {
+		b.addActionListener(actionListener);
+		
+		return new int[] {x, (y + heightInc)};
+	}
+
+	/**
+	 * 
+	 * @param label text to cover button
+	 * @param frame frame to place button into
+	 * @param x axis to place
+	 * @param y axis to place
+	 * @return the next x/y axis to use
+	 */
+	public int [] buildButtonRelay(String label, JFrame frame, int x, int y)
+	{
+		return buildButton(label, frame, x, y, getRelayActionListener());
+	}
+
+	public int [] buildButtonReadRelay(String label, JFrame frame, int x, int y)
+	{
+		return buildButton(label, frame, x, y, getReadRelayActionListener());
+	}
+
+	public ActionListner getRelayActionListener()
+	{
+
+		ActionListener relayActionListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String text = b.getText();
@@ -63,9 +89,37 @@ public class CommandWidgetUtil
 					e1.printStackTrace();
 				}
 			}
-		});
+		};
+		return relayActionListener;
+	}
+
+	public ActionListner getReadRelayActionListener()
+	{
+
+		ActionListener readRelayActionListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String text = b.getText();
+				Relay relay = Relay.getRelay(text);
+				try {
+					System.out.println("The button: " + b.getText() + " was pressed.");
+					//TODO: executeCommand("c/codebase/SmallProjects/solar_control" + "/readRelayToFile.sh");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		};
+		return readRelayActionListener;
+	}
+
+	public void executeCommand(String command) throws IOException
+	{
+		Runtime rt = Runtime.getRuntime();
+		Process p = null;
 		
-		return new int[] {x, (y + heightInc)};
+		p = rt.exec(command);
+		ConsolePrinter.printOutput(p);
 	}
 	
 	public JButton getButtonSelected()
@@ -94,28 +148,33 @@ public class CommandWidgetUtil
 	
 	private void getComponents(Component [] components, Relay relay)
 	{
+		getComponents(components, relay.getDisplayText());
+	}
+
+	private void getComponents(Component [] components, String displayText)
+	{
 		for(Component c : components)
 		{
 			if (c instanceof JPanel)
 			{
-				getComponents(((JPanel)c).getComponents(), relay);
+				getComponents(((JPanel)c).getComponents(), displayText);
 				System.out.println("1");
 			}
 			else if (c instanceof JLayeredPane)
 			{
-				getComponents(((JLayeredPane)c).getComponents(), relay);
+				getComponents(((JLayeredPane)c).getComponents(), displayText);
 				System.out.println("2");
 			}
 			else if (c instanceof JRootPane)
 			{
-				getComponents(((JRootPane)c).getContentPane().getComponents(), relay);
+				getComponents(((JRootPane)c).getContentPane().getComponents(), displayText);
 				int count = ((JRootPane)c).getContentPane().getComponentCount();
 				System.out.println("3" + " " + count + ((JRootPane)c).getContentPane().getComponents().length);
 			}
 			else if (c instanceof JButton)
 			{
 				JButton jb = (JButton) c;
-				if(jb.getText().equals(relay.getDisplayText()))
+				if(jb.getText().equals(displayText))
 				{
 					System.out.println("Found button:" + c);
 					setButtonSelected(jb);
