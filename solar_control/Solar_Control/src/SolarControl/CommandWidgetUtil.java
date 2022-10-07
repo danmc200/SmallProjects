@@ -73,7 +73,7 @@ public class CommandWidgetUtil
 		return buildButton(label, frame, x, y, getReadRelayActionListener());
 	}
 
-	public ActionListner getRelayActionListener()
+	public ActionListener getRelayActionListener()
 	{
 
 		ActionListener relayActionListener = new ActionListener() {
@@ -93,7 +93,7 @@ public class CommandWidgetUtil
 		return relayActionListener;
 	}
 
-	public ActionListner getReadRelayActionListener()
+	public ActionListener getReadRelayActionListener()
 	{
 
 		ActionListener readRelayActionListener = new ActionListener() {
