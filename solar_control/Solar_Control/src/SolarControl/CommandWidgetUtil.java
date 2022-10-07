@@ -50,6 +50,14 @@ public class CommandWidgetUtil
 		JButton b = new JButton(label);
 		b.setBounds(x,y,width,height);//x, y, width, height
 		frame.add(b);
+		if(actionListener instanceof ReadRelayActionListener)
+		{
+			((ReadRelayActionListener)actionListener).setButton(b);
+		}
+		else if(actionListener instanceof RelayActionListener)
+		{
+			((RelayActionListener)actionListener).setButton(b);
+		}
 		b.addActionListener(actionListener);
 		
 		return new int[] {x, (y + heightInc)};
@@ -65,54 +73,15 @@ public class CommandWidgetUtil
 	 */
 	public int [] buildButtonRelay(String label, JFrame frame, int x, int y)
 	{
-		return buildButton(label, frame, x, y, getRelayActionListener());
+		return buildButton(label, frame, x, y, new RelayActionListener());
 	}
 
 	public int [] buildButtonReadRelay(String label, JFrame frame, int x, int y)
 	{
-		return buildButton(label, frame, x, y, getReadRelayActionListener());
+		return buildButton(label, frame, x, y, new ReadRelayActionListener());
 	}
 
-	public ActionListener getRelayActionListener()
-	{
-
-		ActionListener relayActionListener = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String text = b.getText();
-				Relay relay = Relay.getRelay(text);
-				try {
-					System.out.println("The button: " + b.getText() + " was pressed.");
-					relay.executeCommand(ToggleOption.ON);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		};
-		return relayActionListener;
-	}
-
-	public ActionListener getReadRelayActionListener()
-	{
-
-		ActionListener readRelayActionListener = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String text = b.getText();
-				Relay relay = Relay.getRelay(text);
-				try {
-					System.out.println("The button: " + b.getText() + " was pressed.");
-					//TODO: executeCommand("c/codebase/SmallProjects/solar_control" + "/readRelayToFile.sh");
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		};
-		return readRelayActionListener;
-	}
-
+	
 	public void executeCommand(String command) throws IOException
 	{
 		Runtime rt = Runtime.getRuntime();
