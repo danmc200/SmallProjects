@@ -8,10 +8,11 @@ import javax.swing.JButton;
 
 import SolarControl.Relay.ToggleOption;
 
-public class ReadRelayActionListener implements ActionListener
+public class ReadRelayActionListener implements ActionListener, RelaysActionListenerProperties
 {
 	private JButton button;
 	
+	@Override
 	public void setButton(JButton button)
 	{
 		this.button = button;

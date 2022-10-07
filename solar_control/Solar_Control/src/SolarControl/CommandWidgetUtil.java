@@ -50,14 +50,12 @@ public class CommandWidgetUtil
 		JButton b = new JButton(label);
 		b.setBounds(x,y,width,height);//x, y, width, height
 		frame.add(b);
-		if(actionListener instanceof ReadRelayActionListener)
+		
+		if(actionListener instanceof RelaysActionListenerProperties)
 		{
-			((ReadRelayActionListener)actionListener).setButton(b);
+			((RelaysActionListenerProperties)actionListener).setButton(b);
 		}
-		else if(actionListener instanceof RelayActionListener)
-		{
-			((RelayActionListener)actionListener).setButton(b);
-		}
+		
 		b.addActionListener(actionListener);
 		
 		return new int[] {x, (y + heightInc)};
